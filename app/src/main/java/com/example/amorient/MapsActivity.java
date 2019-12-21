@@ -24,6 +24,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 
@@ -34,6 +35,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     LocationRequest mLocationRequest;
     Location mLastLocation;
     FusedLocationProviderClient mFusedLocationClient;
+
+    DecimalFormat df2 = new DecimalFormat("#.##");
 
     TextView txtLat;
     TextView txtLng;
@@ -102,13 +105,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Location location = locationList.get(locationList.size() - 1);
 
 
-                double distance = distance(location.getLatitude(),-32.0750,
-                        location.getLongitude(), -52.1679);
+                String distance = df2.format(distance(location.getLatitude(),-32.0750,
+                        location.getLongitude(), -52.1679));
 
                 txtLng.setText("Lng: " + location.getLongitude());
                 txtLat.setText("Lat: " + location.getLatitude());
 
-                txtDistance.setText(distance + "metros");
+                txtDistance.setText(distance);
 
                 mLastLocation = location;
 
