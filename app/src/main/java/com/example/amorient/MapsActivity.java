@@ -7,7 +7,6 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
-import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +38,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     TextView txtLat;
     TextView txtLng;
 
+    TextView txtDistance;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +48,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         txtLat = findViewById(R.id.lat);
         txtLng = findViewById(R.id.lng);
+        txtDistance = findViewById(R.id.distance);
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -69,8 +71,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mGoogleMap = googleMap;
 
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(1000); //  120000 two minute interval
-        mLocationRequest.setFastestInterval(1000);
+        mLocationRequest.setInterval(500); //  120000 two minute interval
+        mLocationRequest.setFastestInterval(500);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -99,8 +101,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 //The last location in the list is the newest
                 Location location = locationList.get(locationList.size() - 1);
 
+
+                double distance = distance(location.getLatitude(),-32.0750,
+                        location.getLongitude(), -52.1679);
+
                 txtLng.setText("Lng: " + location.getLongitude());
                 txtLat.setText("Lat: " + location.getLatitude());
+
+                txtDistance.setText(distance + "metros");
 
                 mLastLocation = location;
 
@@ -176,6 +184,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             // other 'case' lines to check for other
             // permissions this app might request
         }
+    }
+
+    private double distance(double lat1, double lat2, double lon1, double lon2) {
+
+        final int R = 6371; // Radius of the earth
+
+        double latDistance = deg2rad(lat2 - lat1);
+        double lonDistance = deg2rad(lon2 - lon1);
+
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2))
+                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double distance = R * c * 1000; // convert to meters
+
+        double height = 0.0;
+        distance = Math.pow(distance, 2) + Math.pow(height, 2);
+        return Math.sqrt(distance);
+    }
+
+    private double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
     }
 
 }
