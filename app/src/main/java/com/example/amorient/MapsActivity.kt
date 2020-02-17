@@ -21,13 +21,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.location.*
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MapStyleOptions
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import java.text.DecimalFormat
 import kotlin.math.*
 
@@ -62,6 +60,9 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
 //                txtLat.text = "Lat: " + location.latitude
 //
 //                txtDistance.text = distance
+
+                if(mLastLocation == null)
+                    zoomCurrentPosition(location)
 
                 mLastLocation = location
 
@@ -142,6 +143,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                 //Location Permission already granted
                 mFusedLocationClient!!.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper())
                 mGoogleMap?.isMyLocationEnabled = true
+
             } else {
                 //Request Location Permission
                 checkLocationPermission()
@@ -150,6 +152,13 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
             mFusedLocationClient!!.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper())
             mGoogleMap?.isMyLocationEnabled = true
         }
+    }
+
+    private fun zoomCurrentPosition(location: Location) {
+        val cameraPosition = LatLng(location.latitude, location.longitude)
+        val zoom = 16f
+
+        mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(cameraPosition, zoom))
     }
 
     private fun checkLocationPermission() {
