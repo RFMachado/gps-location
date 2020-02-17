@@ -80,25 +80,25 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
     }
 
     private fun addPoints() = listOf(
-            CheckPoint ( lat = -32.075731, lng = -52.171524),
+            CheckPoint( lat = -32.075731, lng = -52.171524),
             CheckPoint(lat = -32.076270,  lng = -52.170581),
             CheckPoint(lat = -32.075462, lng = -52.173190),
             CheckPoint(lat = -32.075284, lng = -52.173304),
             CheckPoint(lat = -32.075800, lng = -52.172000),
-            CheckPoint (lat = -32.075571, lng = -52.170832),
-            CheckPoint (lat = -32.074263, lng = -52.172776),
-            CheckPoint (lat = -32.076489, lng = -52.170248),
-            CheckPoint (lat = -32.076250, lng = -52.169062),
-            CheckPoint (lat = -32.077008, lng = -52.168453),
-            CheckPoint (lat = -32.077472, lng = -52.168094),
-            CheckPoint (lat= -32.076847, lng = -52.167289),
-            CheckPoint (lat = -32.077458, lng = -52.166176),
-            CheckPoint (lat = -32.075061, lng = -52.167076),
-            CheckPoint (lat = -32.075472, lng = -52.167952),
-            CheckPoint (lat = -32.073725, lng = -52.168713),
-            CheckPoint (lat = -32.074682, lng = -52.169858),
-            CheckPoint (lat = -32.075521, lng =  -52.169220),
-            CheckPoint (lat = -32.077628, lng = -52.171355)
+            CheckPoint(lat = -32.075571, lng = -52.170832),
+            CheckPoint(lat = -32.074263, lng = -52.172776),
+            CheckPoint(lat = -32.076489, lng = -52.170248),
+            CheckPoint(lat = -32.076250, lng = -52.169062),
+            CheckPoint(lat = -32.077008, lng = -52.168453),
+            CheckPoint(lat = -32.077472, lng = -52.168094),
+            CheckPoint(lat= -32.076847, lng = -52.167289),
+            CheckPoint(lat = -32.077458, lng = -52.166176),
+            CheckPoint(lat = -32.075061, lng = -52.167076),
+            CheckPoint(lat = -32.075472, lng = -52.167952),
+            CheckPoint(lat = -32.073725, lng = -52.168713),
+            CheckPoint(lat = -32.074682, lng = -52.169858),
+            CheckPoint(lat = -32.075521, lng =  -52.169220),
+            CheckPoint(lat = -32.077628, lng = -52.171355)
     )
 
     public override fun onPause() {
