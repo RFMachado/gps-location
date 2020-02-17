@@ -80,7 +80,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
     }
 
     private fun addPoints() = listOf(
-            CheckPoint ( lat = -32.075731, lng = -52.171524, description = ),
+            CheckPoint ( lat = -32.075731, lng = -52.171524),
             CheckPoint(lat = -32.076270,  lng = -52.170581),
             CheckPoint(lat = -32.075462, lng = -52.173190),
             CheckPoint(lat = -32.075284, lng = -52.173304),
