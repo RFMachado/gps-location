@@ -2,6 +2,7 @@ package com.example.amorient
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -11,6 +12,7 @@ import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.os.Looper
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View.MeasureSpec.UNSPECIFIED
 import android.widget.ImageView
@@ -26,7 +28,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
-import java.text.DecimalFormat
+import kotlinx.android.synthetic.main.activity_maps.*
 import kotlin.math.*
 
 
@@ -38,11 +40,31 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
     private var mLocationRequest: LocationRequest? = null
     private var mFusedLocationClient: FusedLocationProviderClient? = null
 
-    val checkPoints = addPoints()
-    var df2 = DecimalFormat("#.##")
+    private var checkPoints : List<CheckPoint> = listOf()
+    private val hashMapMarker = HashMap<Int, Marker>()
 
     companion object {
+        const val REQUEST_IMAGE_CAPTURE = 1
         const val MY_PERMISSIONS_REQUEST_LOCATION = 99
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_maps)
+
+        checkPoints = addPoints()
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        mapFrag = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFrag?.getMapAsync(this)
+
+        bindListener()
+    }
+
+    private fun bindListener() {
+        btnPhoto.setOnClickListener {
+            dispatchTakePictureIntent()
+        }
     }
 
     private var mLocationCallback: LocationCallback = object : LocationCallback() {
@@ -51,15 +73,6 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
             if (locationList.size > 0) {
                 //The last location in the list is the newest
                 val location = locationList[locationList.size - 1]
-
-
-                val distance = df2.format(distance(location.latitude, -32.0750,
-                        location.longitude, -52.1679))
-
-//                txtLng.text = "Lng: " + location.longitude
-//                txtLat.text = "Lat: " + location.latitude
-//
-//                txtDistance.text = distance
 
                 if(mLastLocation == null)
                     zoomCurrentPosition(location)
@@ -70,15 +83,6 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_maps)
-
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
-        mapFrag = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-        mapFrag?.getMapAsync(this)
-    }
 
     private fun addPoints() = listOf(
             CheckPoint( lat = -32.075731, lng = -52.171524, image = R.drawable.img_ponto_um),
@@ -114,9 +118,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mGoogleMap = googleMap
 
-        googleMap.setMapStyle(
-                MapStyleOptions.loadRawResourceStyle(this, R.raw.style_json)
-        )
+        googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style_json))
 
         mLocationRequest = LocationRequest().apply {
             interval = 500 //  120000 two minute interval
@@ -124,16 +126,17 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
             priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
         }
 
-        checkPoints.forEachIndexed{ index, checkPoint ->
+        checkPoints.forEachIndexed { index, checkPoint ->
             val image = getMarkerBitmapFromView(checkPoint.image)
 
-            mGoogleMap!!.addMarker(
-                    MarkerOptions()
-                            .position(LatLng(checkPoint.lat, checkPoint.lng))
-                            .title("P$index")
-                            .snippet("P$index")
-                            .icon(BitmapDescriptorFactory.fromBitmap(image))
-            )
+            val markerOptions = MarkerOptions()
+                    .position(LatLng(checkPoint.lat, checkPoint.lng))
+                    .title("P$index")
+                    .snippet("P$index")
+                    .icon(BitmapDescriptorFactory.fromBitmap(image))
+
+            val marker =  mGoogleMap!!.addMarker(markerOptions)
+            hashMapMarker[index] = marker
         }
 
 
@@ -159,6 +162,14 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
         val zoom = 16f
 
         mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(cameraPosition, zoom))
+    }
+
+    private fun dispatchTakePictureIntent() {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            takePictureIntent.resolveActivity(packageManager)?.also {
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+            }
+        }
     }
 
     private fun checkLocationPermission() {
@@ -264,6 +275,35 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
         customMarkerView.draw(canvas)
 
         return returnedBitmap
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            checkPointIsValidate()
+        }
+    }
+
+    private fun checkPointIsValidate() {
+        mLastLocation?.let {
+            checkPoints.forEachIndexed { index, checkPoint ->
+                val distance = distance(
+                        mLastLocation!!.latitude, checkPoint.lat,
+                        mLastLocation!!.longitude, checkPoint.lng
+                )
+
+                if(distance <= 25) {
+                    checkPoints.drop(index)
+
+                    val marker = hashMapMarker[index]
+                    marker?.remove()
+                    hashMapMarker.remove(index)
+
+                    return@forEachIndexed
+                }
+            }
+        }
     }
 
 }
