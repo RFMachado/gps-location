@@ -81,25 +81,25 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
     }
 
     private fun addPoints() = listOf(
-            CheckPoint( lat = -32.075731, lng = -52.171524),
-            CheckPoint(lat = -32.076270,  lng = -52.170581),
-            CheckPoint(lat = -32.075462, lng = -52.173190),
-            CheckPoint(lat = -32.075284, lng = -52.173304),
-            CheckPoint(lat = -32.075800, lng = -52.172000),
-            CheckPoint(lat = -32.075571, lng = -52.170832),
-            CheckPoint(lat = -32.074263, lng = -52.172776),
-            CheckPoint(lat = -32.076489, lng = -52.170248),
-            CheckPoint(lat = -32.076250, lng = -52.169062),
-            CheckPoint(lat = -32.077008, lng = -52.168453),
-            CheckPoint(lat = -32.077472, lng = -52.168094),
-            CheckPoint(lat= -32.076847, lng = -52.167289),
-            CheckPoint(lat = -32.077458, lng = -52.166176),
-            CheckPoint(lat = -32.075061, lng = -52.167076),
-            CheckPoint(lat = -32.075472, lng = -52.167952),
-            CheckPoint(lat = -32.073725, lng = -52.168713),
-            CheckPoint(lat = -32.074682, lng = -52.169858),
-            CheckPoint(lat = -32.075521, lng =  -52.169220),
-            CheckPoint(lat = -32.077628, lng = -52.171355)
+            CheckPoint( lat = -32.075731, lng = -52.171524, image = R.drawable.img_ponto_um),
+            CheckPoint(lat = -32.076270,  lng = -52.170581, image = R.drawable.img_ponto_dois),
+            CheckPoint(lat = -32.075462, lng = -52.173190, image = R.drawable.img_ponto_tres),
+            CheckPoint(lat = -32.075284, lng = -52.173304, image = R.drawable.img_ponto_quatro),
+            CheckPoint(lat = -32.075800, lng = -52.172000, image = R.drawable.img_ponto_cinco),
+            CheckPoint(lat = -32.075571, lng = -52.170832, image = R.drawable.img_ponto_seis),
+            CheckPoint(lat = -32.074263, lng = -52.172776, image = R.drawable.img_ponto_sete),
+            CheckPoint(lat = -32.076489, lng = -52.170248, image = R.drawable.img_ponto_oito),
+            CheckPoint(lat = -32.076250, lng = -52.169062, image = R.drawable.img_ponto_nove),
+            CheckPoint(lat = -32.077008, lng = -52.168453, image = R.drawable.img_ponto_dez),
+            CheckPoint(lat = -32.077472, lng = -52.168094, image = R.drawable.img_ponto_onze),
+            CheckPoint(lat= -32.076847, lng = -52.167289, image = R.drawable.img_ponto_doze),
+            CheckPoint(lat = -32.077458, lng = -52.166176, image = R.drawable.img_ponto_treze),
+            CheckPoint(lat = -32.075061, lng = -52.167076, image = R.drawable.img_ponto_quatorze),
+            CheckPoint(lat = -32.075472, lng = -52.167952, image = R.drawable.img_ponto_quinze),
+            CheckPoint(lat = -32.073725, lng = -52.168713, image = R.drawable.img_ponto_dezessseis),
+            CheckPoint(lat = -32.074682, lng = -52.169858, image = R.drawable.img_ponto_dezessete),
+            CheckPoint(lat = -32.075521, lng =  -52.169220, image = R.drawable.img_ponto_dezoito),
+            CheckPoint(lat = -32.077628, lng = -52.171355, image = R.drawable.img_ponto_dezenove)
     )
 
     public override fun onPause() {

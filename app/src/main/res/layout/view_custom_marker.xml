@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/custom_marker_view"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
@@ -8,8 +9,7 @@
         android:id="@+id/profile_image"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_gravity="center_horizontal"
-        android:rotation="90"
+        tools:src="@drawable/img_ponto_um"
         android:contentDescription="@null"/>
 
 </FrameLayout>
