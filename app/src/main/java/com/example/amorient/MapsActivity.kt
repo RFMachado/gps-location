@@ -40,7 +40,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
     private var mLocationRequest: LocationRequest? = null
     private var mFusedLocationClient: FusedLocationProviderClient? = null
 
-    private var checkPoints : List<CheckPoint> = listOf()
+    private var checkPoints : MutableList<CheckPoint> = mutableListOf()
     private val hashMapMarker = HashMap<Int, Marker>()
 
     companion object {
@@ -84,7 +84,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
     }
 
 
-    private fun addPoints() = listOf(
+    private fun addPoints() = mutableListOf(
             CheckPoint( lat = -32.075731, lng = -52.171524, image = R.drawable.img_ponto_um),
             CheckPoint(lat = -32.076270,  lng = -52.170581, image = R.drawable.img_ponto_dois),
             CheckPoint(lat = -32.075462, lng = -52.173190, image = R.drawable.img_ponto_tres),
@@ -294,13 +294,13 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                 )
 
                 if(distance <= 25) {
-                    checkPoints.drop(index)
+                    checkPoints.removeAt(index)
 
                     val marker = hashMapMarker[index]
                     marker?.remove()
                     hashMapMarker.remove(index)
 
-                    return@forEachIndexed
+                    return
                 }
             }
         }
