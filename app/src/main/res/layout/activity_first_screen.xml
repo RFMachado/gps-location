@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_gradient">
+
+    <ImageView
+        android:layout_width="300dp"
+        android:layout_height="400dp"
+        android:layout_gravity="top|center"
+        android:layout_marginTop="50dp"
+        android:src="@drawable/busula_bill"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btnPlay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="20dp"
+            android:layout_marginBottom="60dp"
+            android:layout_gravity="center"
+            android:paddingStart="20dp"
+            android:textSize="20sp"
+            android:text="JOGAR"
+            style="?android:attr/borderlessButtonStyle"
+            android:background="@drawable/bg_stroke_large"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="15dp"
+                android:paddingStart="15dp"
+                android:textSize="20sp"
+                android:text="TUTORIAL"
+                style="?android:attr/borderlessButtonStyle"
+                android:background="@drawable/bg_stroke_large"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/btnExit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="15dp"
+                android:paddingStart="15dp"
+                android:textSize="20sp"
+                style="?android:attr/borderlessButtonStyle"
+                android:text="SAIR"
+                android:background="@drawable/bg_stroke_large"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

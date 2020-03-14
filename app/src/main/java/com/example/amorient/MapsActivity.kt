@@ -47,6 +47,8 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
         const val MY_PERMISSIONS_REQUEST_LOCATION = 99
         const val INTERVAL_CHECK_LOCATION = 500L //  120000 two minute interval
 
+        fun launchIntent(context: Context) = Intent(context, MapsActivity::class.java)
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
