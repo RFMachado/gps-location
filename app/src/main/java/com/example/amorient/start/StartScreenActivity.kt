@@ -1,0 +1,51 @@
+package com.example.amorient.start
+
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.example.amorient.MapsActivity
+import com.example.amorient.R
+import kotlinx.android.synthetic.main.activity_start_screen.*
+
+class StartScreenActivity: AppCompatActivity() {
+
+    companion object {
+        fun launchIntent(context: Context) = Intent(context, StartScreenActivity::class.java)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_start_screen)
+
+        checkIndividual.setOnClickListener {
+            checkEquipe.isChecked = false
+        }
+
+        checkEquipe.setOnClickListener {
+            checkIndividual.isChecked = false
+        }
+
+        checkMedium.setOnClickListener {
+            checkEasy.isChecked = false
+            checkHard.isChecked = false
+        }
+
+        checkEasy.setOnClickListener {
+            checkMedium.isChecked = false
+            checkHard.isChecked = false
+        }
+
+        checkHard.setOnClickListener {
+            checkMedium.isChecked = false
+            checkEasy.isChecked = false
+        }
+
+        btnStart.setOnClickListener {
+            MapsActivity.launchIntent(this).also { intent ->
+                startActivity(intent)
+            }
+            finish()
+        }
+    }
+}

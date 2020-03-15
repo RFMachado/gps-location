@@ -1,7 +1,9 @@
-package com.example.amorient
+package com.example.amorient.firstscreen
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.amorient.R
+import com.example.amorient.start.StartScreenActivity
 import kotlinx.android.synthetic.main.activity_first_screen.*
 
 class FirstScreenActivity: AppCompatActivity() {
@@ -11,9 +13,11 @@ class FirstScreenActivity: AppCompatActivity() {
         setContentView(R.layout.activity_first_screen)
 
         btnPlay.setOnClickListener {
-            MapsActivity.launchIntent(this).also { intent ->
+            StartScreenActivity.launchIntent(this).also { intent ->
                 startActivity(intent)
             }
+
+            finish()
         }
 
         btnExit.setOnClickListener {
