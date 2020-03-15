@@ -102,9 +102,14 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        mGoogleMap = googleMap
+        mGoogleMap = googleMap.apply {
+            uiSettings.isMapToolbarEnabled = false
+            uiSettings.isMyLocationButtonEnabled = false
+            uiSettings.isCompassEnabled = false
+            uiSettings.isRotateGesturesEnabled = false
 
-        googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style_json))
+            setMapStyle(MapStyleOptions.loadRawResourceStyle(this@MapsActivity, R.raw.style_json))
+        }
 
         mLocationRequest = LocationRequest().apply {
             interval = INTERVAL_CHECK_LOCATION
