@@ -1,4 +1,4 @@
-package com.example.amorient
+package com.example.amorient.map
 
 import android.Manifest
 import android.content.Context
@@ -14,6 +14,7 @@ import android.os.Bundle
 import android.os.Looper
 import android.provider.MediaStore
 import android.view.LayoutInflater
+import android.view.View
 import android.view.View.MeasureSpec.UNSPECIFIED
 import android.widget.ImageView
 import android.widget.Toast
@@ -22,6 +23,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import com.example.amorient.R
+import com.example.amorient.Utils
+import com.example.amorient.model.CheckPoint
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -66,6 +70,10 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
 
     private fun bindListener() {
         btnPhoto.setOnClickListener {
+            dispatchTakePictureIntent()
+        }
+
+        btnPhotoFirstStep.setOnClickListener {
             dispatchTakePictureIntent()
         }
     }
@@ -242,6 +250,11 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                 )
 
                 if(distance <= 25) {
+                    if (checkPoints[index].key == 1) {
+                        layoutFirstStep.visibility = View.GONE
+                        openDialog()
+                    }
+
                     val key = checkPoints[index].key
                     val marker = hashMapMarker[key]
 
@@ -253,6 +266,18 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                     return
                 }
             }
+        }
+    }
+
+    private fun openDialog() {
+        AlertDialog.Builder(this).apply {
+            setMessage("Seus desafio agora é decidir a melhor ordem de visitação. \nVamos Nessa!")
+
+            setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss()
+            }
+
+            create().show()
         }
     }
 

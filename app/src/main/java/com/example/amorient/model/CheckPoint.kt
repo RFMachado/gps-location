@@ -1,4 +1,4 @@
-package com.example.amorient
+package com.example.amorient.model
 
 class CheckPoint(
         val lat: Double,

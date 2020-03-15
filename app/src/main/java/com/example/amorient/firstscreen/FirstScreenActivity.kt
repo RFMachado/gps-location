@@ -13,9 +13,8 @@ class FirstScreenActivity: AppCompatActivity() {
         setContentView(R.layout.activity_first_screen)
 
         btnPlay.setOnClickListener {
-            StartScreenActivity.launchIntent(this).also { intent ->
-                startActivity(intent)
-            }
+            val intent = StartScreenActivity.launchIntent(this)
+            startActivity(intent)
 
             finish()
         }

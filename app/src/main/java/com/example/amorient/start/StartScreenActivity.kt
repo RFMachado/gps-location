@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.amorient.MapsActivity
+import com.example.amorient.map.MapsActivity
 import com.example.amorient.R
 import kotlinx.android.synthetic.main.activity_start_screen.*
 
@@ -42,9 +42,9 @@ class StartScreenActivity: AppCompatActivity() {
         }
 
         btnStart.setOnClickListener {
-            MapsActivity.launchIntent(this).also { intent ->
-                startActivity(intent)
-            }
+            val intent = MapsActivity.launchIntent(this)
+            startActivity(intent)
+
             finish()
         }
     }

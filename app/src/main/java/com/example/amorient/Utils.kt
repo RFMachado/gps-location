@@ -1,5 +1,6 @@
 package com.example.amorient
 
+import com.example.amorient.model.CheckPoint
 import kotlin.math.*
 
 object Utils {
@@ -28,19 +29,19 @@ object Utils {
 
     fun addPoints() = mutableListOf(
             CheckPoint(lat = -32.075731, lng = -52.171524, image = R.drawable.img_ponto_um, key = 1),
-            CheckPoint(lat = -32.076270,  lng = -52.170581, image = R.drawable.img_ponto_dois, key = 2),
+            CheckPoint(lat = -32.076270, lng = -52.170581, image = R.drawable.img_ponto_dois, key = 2),
             CheckPoint(lat = -32.075284, lng = -52.173304, image = R.drawable.img_ponto_quatro, key = 3),
             CheckPoint(lat = -32.075800, lng = -52.172000, image = R.drawable.img_ponto_cinco, key = 4),
             CheckPoint(lat = -32.074263, lng = -52.172776, image = R.drawable.img_ponto_sete, key = 5),
             CheckPoint(lat = -32.076489, lng = -52.170248, image = R.drawable.img_ponto_oito, key = 6),
             CheckPoint(lat = -32.076250, lng = -52.169062, image = R.drawable.img_ponto_nove, key = 7),
             CheckPoint(lat = -32.077472, lng = -52.168094, image = R.drawable.img_ponto_onze, key = 8),
-            CheckPoint(lat= -32.076847, lng = -52.167289, image = R.drawable.img_ponto_doze, key = 9),
+            CheckPoint(lat = -32.076847, lng = -52.167289, image = R.drawable.img_ponto_doze, key = 9),
             CheckPoint(lat = -32.077458, lng = -52.166176, image = R.drawable.img_ponto_treze, key = 10),
             CheckPoint(lat = -32.075472, lng = -52.167952, image = R.drawable.img_ponto_quinze, key = 11),
             CheckPoint(lat = -32.073725, lng = -52.168713, image = R.drawable.img_ponto_dezessseis, key = 12),
             CheckPoint(lat = -32.074682, lng = -52.169858, image = R.drawable.img_ponto_dezessete, key = 13),
-            CheckPoint(lat = -32.075521, lng =  -52.169220, image = R.drawable.img_ponto_dezoito, key = 14),
+            CheckPoint(lat = -32.075521, lng = -52.169220, image = R.drawable.img_ponto_dezoito, key = 14),
             CheckPoint(lat = -32.077628, lng = -52.171355, image = R.drawable.img_ponto_dezenove, key = 15)
     )
 }
