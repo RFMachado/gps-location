@@ -26,6 +26,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import com.example.amorient.R
 import com.example.amorient.Utils
+import com.example.amorient.detail.PointDetailActivity
 import com.example.amorient.model.CheckPoint
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -129,6 +130,20 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
             uiSettings.isRotateGesturesEnabled = false
 
             setMapStyle(MapStyleOptions.loadRawResourceStyle(this@MapsActivity, R.raw.style_json))
+
+            setOnMarkerClickListener {
+                val tag = it.tag as Int?
+
+                tag?.let { checkPoints.forEach { checkPoint ->
+                        if (checkPoint.key == tag) {
+                            val intent = PointDetailActivity.launchIntent(this@MapsActivity, checkPoint)
+                            startActivity(intent)
+                        }
+                    }
+                }
+
+                false
+            }
         }
 
         mLocationRequest = LocationRequest().apply {
@@ -147,6 +162,8 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                     .icon(BitmapDescriptorFactory.fromBitmap(image))
 
             val marker =  mGoogleMap!!.addMarker(markerOptions)
+            marker.tag = checkPoint.key
+
             hashMapMarker[checkPoint.key] = marker
         }
 
@@ -288,7 +305,8 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                     hashMapMarker.remove(key)
                     checkPoints.removeAt(index)
 
-                    txtTime.text = "${totalPoints-checkPoints.size} / $totalPoints"
+                    val timeText = "${totalPoints-checkPoints.size} / $totalPoints"
+                    txtTime.text = timeText
 
                     return
                 }
