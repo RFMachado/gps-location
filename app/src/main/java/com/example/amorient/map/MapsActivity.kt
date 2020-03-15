@@ -12,6 +12,7 @@ import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.os.Looper
+import android.os.SystemClock
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
@@ -44,6 +45,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
     private var mFusedLocationClient: FusedLocationProviderClient? = null
 
     private var checkPoints : MutableList<CheckPoint> = mutableListOf()
+    private var totalPoints = 0
     private val hashMapMarker = HashMap<Int, Marker>()
 
     companion object {
@@ -60,6 +62,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
         setContentView(R.layout.activity_maps)
 
         checkPoints = Utils.addPoints()
+        totalPoints = checkPoints.size
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         mapFrag = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
@@ -76,6 +79,23 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
         btnPhotoFirstStep.setOnClickListener {
             dispatchTakePictureIntent()
         }
+
+        chronometer.setOnChronometerTickListener {
+            val time = SystemClock.elapsedRealtime() - chronometer.base
+            val h = (time /3600000).toInt()
+            val m = ((time - h*3600000)/60000).toInt()
+            val s = ((time - h*3600000 - m*60000)/1000).toInt()
+
+            val hour = if (h < 10) "0$h" else "$h"
+            val minute = if (m < 10) "0$m" else "$m"
+            val second = if (s < 10) "0$s" else "$s"
+
+
+            val t = "$hour : $minute : $second"
+            chronometer.text = t
+        }
+
+        chronometer.text = "00:00"
     }
 
     private var mLocationCallback: LocationCallback = object : LocationCallback() {
@@ -268,6 +288,8 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                     hashMapMarker.remove(key)
                     checkPoints.removeAt(index)
 
+                    txtTime.text = "${totalPoints-checkPoints.size} / $totalPoints"
+
                     return
                 }
             }
@@ -280,6 +302,11 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
 
             setPositiveButton("OK") { dialog, _ ->
                 dialog.dismiss()
+            }
+
+            setOnDismissListener {
+                chronometer.base = SystemClock.elapsedRealtime()
+                chronometer.start()
             }
 
             create().show()
