@@ -75,7 +75,7 @@
                         android:textSize="16sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="ALVOS"/>
+                        android:text="PONTOS"/>
 
                     <TextView
                         android:textSize="16sp"
@@ -193,7 +193,7 @@
                 android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ALVOS"/>
+                android:text="PONTOS"/>
 
             <TextView
                 android:id="@+id/txtTime"

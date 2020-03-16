@@ -157,8 +157,6 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
 
             val markerOptions = MarkerOptions()
                     .position(LatLng(checkPoint.lat, checkPoint.lng))
-                    .title("P$index")
-                    .snippet("P$index")
                     .icon(BitmapDescriptorFactory.fromBitmap(image))
 
             val marker =  mGoogleMap!!.addMarker(markerOptions)
