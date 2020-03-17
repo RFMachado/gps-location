@@ -8,6 +8,10 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.PorterDuff
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
@@ -37,10 +41,15 @@ import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.activity_maps.*
 
 
-class MapsActivity : FragmentActivity(), OnMapReadyCallback {
+class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener {
 
     var mLastLocation: Location? = null
     private var mGoogleMap: GoogleMap? = null
+    private var sensorManager: SensorManager? = null
+    private var accelerometer: Sensor? = null
+    private var magnetometer: Sensor? = null
+    private var rotationvector: Sensor? = null
+
     private var mapFrag: SupportMapFragment? = null
     private var mLocationRequest: LocationRequest? = null
     private var mFusedLocationClient: FusedLocationProviderClient? = null
@@ -48,6 +57,20 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
     private var checkPoints : MutableList<CheckPoint> = mutableListOf()
     private var totalPoints = 0
     private val hashMapMarker = HashMap<Int, Marker>()
+
+    private var rotationMatrix = FloatArray(9)
+    private var orientation = FloatArray(3)
+    private var azimuth: Int = 0
+
+    private var lastAccelerometer = FloatArray(3)
+    private var lastAccelerometerSet = false
+
+    private var lastMagnetometer = FloatArray(3)
+    private var lastMagnetometerSet = false
+
+    var haveSensorAccelerometer = false
+    var haveSensorMagnetometer = false
+    var haveSensorRotationVector = false
 
     companion object {
         const val REQUEST_IMAGE_CAPTURE = 1
@@ -61,6 +84,9 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
+
+        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        startCompass()
 
         checkPoints = Utils.addPoints()
         totalPoints = checkPoints.size
@@ -117,7 +143,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
 
     public override fun onPause() {
         super.onPause()
-
+        stopCompass()
         //stop location updates when Activity is no longer active
         mFusedLocationClient?.let { mFusedLocationClient!!.removeLocationUpdates(mLocationCallback) }
     }
@@ -135,11 +161,11 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                 val tag = it.tag as Int?
 
                 tag?.let { checkPoints.forEach { checkPoint ->
-                        if (checkPoint.key == tag) {
-                            val intent = PointDetailActivity.launchIntent(this@MapsActivity, checkPoint)
-                            startActivity(intent)
-                        }
+                    if (checkPoint.key == tag) {
+                        val intent = PointDetailActivity.launchIntent(this@MapsActivity, checkPoint)
+                        startActivity(intent)
                     }
+                }
                 }
 
                 false
@@ -327,6 +353,68 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
 
             create().show()
         }
+    }
+
+
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) { }
+    override fun onSensorChanged(event: SensorEvent?) {
+        if (event?.sensor?.type == Sensor.TYPE_ROTATION_VECTOR) {
+            SensorManager.getRotationMatrixFromVector(rotationMatrix, event.values)
+            azimuth = (Math.toDegrees(SensorManager.getOrientation(rotationMatrix , orientation)[0].toDouble())+360).toInt()%360
+        }
+
+        if (event?.sensor?.type == Sensor.TYPE_ACCELEROMETER) {
+            System.arraycopy(event.values, 0, lastAccelerometer, 0, event.values.size)
+            lastAccelerometerSet = true
+        } else if (event?.sensor?.type == Sensor.TYPE_MAGNETIC_FIELD) {
+            System.arraycopy(event.values, 0, lastMagnetometer, 0, event.values.size)
+            lastMagnetometerSet = true
+        }
+
+        if (lastAccelerometerSet && lastMagnetometerSet) {
+            SensorManager.getRotationMatrix(rotationMatrix, null, lastAccelerometer, lastAccelerometer)
+            SensorManager.getOrientation(rotationMatrix, orientation)
+            azimuth = (Math.toDegrees(SensorManager.getOrientation(rotationMatrix, orientation)[0].toDouble())+360).toInt()%360
+        }
+
+        azimuth = Math.round(azimuth.toFloat())
+        imgCompass.rotation = (-azimuth).toFloat()
+    }
+
+
+
+    private fun startCompass() {
+        if (sensorManager!!.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR) == null) {
+            if (sensorManager!!.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) == null ||
+                    sensorManager!!.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) == null  ) {
+                    noSensorAlert()
+            } else {
+                accelerometer = sensorManager!!.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+                magnetometer = sensorManager!!.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
+
+                haveSensorAccelerometer = sensorManager!!.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI)
+                haveSensorMagnetometer = sensorManager!!.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI)
+            }
+        } else {
+            rotationvector = sensorManager!!.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
+            haveSensorRotationVector = sensorManager!!.registerListener(this, rotationvector, SensorManager.SENSOR_DELAY_UI)
+        }
+    }
+
+    fun stopCompass() {
+        if(haveSensorRotationVector) sensorManager!!.unregisterListener(this, rotationvector)
+        if(haveSensorMagnetometer) sensorManager!!.unregisterListener(this, magnetometer)
+        if(haveSensorAccelerometer) sensorManager!!.unregisterListener(this, accelerometer)
+    }
+
+    fun noSensorAlert() {
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        startCompass()
     }
 
 }
