@@ -31,6 +31,7 @@ import androidx.fragment.app.FragmentActivity
 import com.example.amorient.R
 import com.example.amorient.Utils
 import com.example.amorient.detail.PointDetailActivity
+import com.example.amorient.formatDistance
 import com.example.amorient.model.CheckPoint
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -154,18 +155,22 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
             uiSettings.isMyLocationButtonEnabled = false
             uiSettings.isCompassEnabled = false
             uiSettings.isRotateGesturesEnabled = false
+            uiSettings.isTiltGesturesEnabled = false
 
             setMapStyle(MapStyleOptions.loadRawResourceStyle(this@MapsActivity, R.raw.style_json))
 
             setOnMarkerClickListener {
                 val tag = it.tag as Int?
 
-                tag?.let { checkPoints.forEach { checkPoint ->
-                    if (checkPoint.key == tag) {
-                        val intent = PointDetailActivity.launchIntent(this@MapsActivity, checkPoint)
-                        startActivity(intent)
+                tag?.let {
+                    checkPoints.forEach { checkPoint ->
+                        if (checkPoint.key == tag) {
+                            val pointDistance = getDistanceAzimute(checkPoint)
+
+                            val intent = PointDetailActivity.launchIntent(this@MapsActivity, pointDistance)
+                            startActivity(intent)
+                        }
                     }
-                }
                 }
 
                 false
@@ -209,9 +214,67 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
         }
     }
 
+    private fun getDistanceAzimute(point: CheckPoint): CheckPoint {
+        mLastLocation?.let { myLocation ->
+            val distance = Utils.distance(
+                    myLocation.latitude, point.lat,
+                    myLocation.longitude, point.lng
+            )
+
+            val azimute = Utils.bearing(myLocation.latitude, myLocation.longitude, point.lat, point.lng)
+
+            return point.copy(distance = distance.formatDistance() + azimute)
+        }
+
+        return point
+    }
+
     private fun zoomCurrentPosition(location: Location) {
-        val cameraPosition = LatLng(location.latitude, location.longitude)
-        mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(cameraPosition, 16f))
+        val colorRed = 0xFFF44336.toInt()
+        val target = LatLng(location.latitude, location.longitude)
+
+        val cameraPosition = CameraPosition.Builder()
+                .target(target)
+                .zoom(16f)
+                .bearing(10f)
+                .build()
+
+        val polyline = PolylineOptions()
+                .add(
+                        LatLng(-32.078711, -52.172849),
+                        LatLng(-32.068907, -52.170849)
+                )
+
+        val polyline2 = PolylineOptions()
+                .add(
+                        LatLng(-32.078711, -52.169349),
+                        LatLng(-32.068907, -52.167349)
+                )
+
+        val polyline3 = PolylineOptions()
+                .add(
+                        LatLng(-32.078711, -52.165849),
+                        LatLng(-32.068907, -52.163849)
+                )
+
+        val pol = mGoogleMap?.addPolyline(polyline)
+        val pol2 = mGoogleMap?.addPolyline(polyline2)
+        val pol3 = mGoogleMap?.addPolyline(polyline3)
+
+        pol?.tag = "A"
+        pol?.color = colorRed
+        pol?.endCap = CustomCap(BitmapDescriptorFactory.fromResource(R.drawable.ic_triangle), 10f)
+
+        pol2?.tag = "B"
+        pol2?.color = colorRed
+        pol2?.endCap = CustomCap(BitmapDescriptorFactory.fromResource(R.drawable.ic_triangle), 10f)
+
+        pol3?.tag = "C"
+        pol3?.color = colorRed
+        pol3?.endCap = CustomCap(BitmapDescriptorFactory.fromResource(R.drawable.ic_triangle), 10f)
+
+        mGoogleMap?.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+
     }
 
     private fun dispatchTakePictureIntent() {
@@ -388,7 +451,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
         if (sensorManager!!.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR) == null) {
             if (sensorManager!!.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) == null ||
                     sensorManager!!.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) == null  ) {
-                    noSensorAlert()
+                noSensorAlert()
             } else {
                 accelerometer = sensorManager!!.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
                 magnetometer = sensorManager!!.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)

@@ -5,11 +5,11 @@ import kotlinx.android.parcel.Parcelize
 
 
 @Parcelize
-class CheckPoint(
+data class CheckPoint(
         val lat: Double,
         val lng: Double,
         val description: String = "",
-        val title: String = "",
+        val distance: String = "",
         val image: Int,
         val key: Int
 ): Parcelable

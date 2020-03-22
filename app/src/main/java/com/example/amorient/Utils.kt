@@ -27,21 +27,44 @@ object Utils {
         return deg * Math.PI / 180.0
     }
 
+    fun bearing(lat1: Double, lon1: Double, lat2: Double, lon2: Double): String {
+        val latitude1 = Math.toRadians(lat1)
+        val latitude2 = Math.toRadians(lat2)
+
+        val longDiff = Math.toRadians(lon2 - lon1)
+
+        val y = sin(longDiff) * cos(latitude2)
+        val x = cos(latitude1) * sin(latitude2) - sin(latitude1) * cos(latitude2) * cos(longDiff)
+
+        val resultDegree = (Math.toDegrees(atan2(y = y, x = x)) + 360) % 360
+        val coordNames = arrayOf("N", "NNE", "NE", "ENE", "L", "ESE", "SE", "SSE", "S", "SSO", "SO", "OSO", "O", "ONO", "NO", "NNO", "N")
+        var directionid = Math.round(resultDegree / 22.5).toDouble()
+        // no of array contain 360/16=22.5
+        if (directionid < 0) {
+            directionid += 16
+        }
+
+        val compasLoc = coordNames[directionid.toInt()]
+
+        return "   $compasLoc ${resultDegree.formatAzimute()}"
+    }
+
     fun addPoints() = mutableListOf(
-            CheckPoint(lat = -32.075731, lng = -52.171524, image = R.drawable.img_ponto_um, key = 1),
-            CheckPoint(lat = -32.076270, lng = -52.170581, image = R.drawable.img_ponto_dois, key = 2),
-            CheckPoint(lat = -32.075284, lng = -52.173304, image = R.drawable.img_ponto_quatro, key = 3),
-            CheckPoint(lat = -32.075800, lng = -52.172000, image = R.drawable.img_ponto_cinco, key = 4),
-            CheckPoint(lat = -32.074263, lng = -52.172776, image = R.drawable.img_ponto_sete, key = 5),
-            CheckPoint(lat = -32.076489, lng = -52.170248, image = R.drawable.img_ponto_oito, key = 6),
-            CheckPoint(lat = -32.076250, lng = -52.169062, image = R.drawable.img_ponto_nove, key = 7),
-            CheckPoint(lat = -32.077472, lng = -52.168094, image = R.drawable.img_ponto_onze, key = 8),
-            CheckPoint(lat = -32.076847, lng = -52.167289, image = R.drawable.img_ponto_doze, key = 9),
-            CheckPoint(lat = -32.077458, lng = -52.166176, image = R.drawable.img_ponto_treze, key = 10),
-            CheckPoint(lat = -32.075472, lng = -52.167952, image = R.drawable.img_ponto_quinze, key = 11),
-            CheckPoint(lat = -32.073725, lng = -52.168713, image = R.drawable.img_ponto_dezessseis, key = 12),
-            CheckPoint(lat = -32.074682, lng = -52.169858, image = R.drawable.img_ponto_dezessete, key = 13),
-            CheckPoint(lat = -32.075521, lng = -52.169220, image = R.drawable.img_ponto_dezoito, key = 14),
-            CheckPoint(lat = -32.077628, lng = -52.171355, image = R.drawable.img_ponto_dezenove, key = 15)
+            CheckPoint(lat = -32.075706, lng = -52.171241, image = R.drawable.img_ponto_um,
+                     description = "Mural CAIC - FURG", key = 1),
+            CheckPoint(lat = -32.076275, lng = -52.170570, image = R.drawable.img_ponto_dois,
+                    description = "Sistema de caixas d'água", key = 2),
+            CheckPoint(lat = -32.075283, lng = -52.173188, image = R.drawable.img_ponto_quatro,
+                    description = "Quadra Poliesportiva", key = 3),
+            CheckPoint(lat = -32.075847, lng = -52.172147, image = R.drawable.img_ponto_cinco,
+                    description = "Pracinha CAIC-FURG", key = 4),
+            CheckPoint(lat = -32.076485, lng = -52.170247, image = R.drawable.img_ponto_oito,
+                    description = "Mesa de piquenique", key = 5),
+            CheckPoint(lat = -32.077460, lng = -52.168101, image = R.drawable.img_ponto_onze,
+                    description = "Árvore com balanço", key = 6),
+            CheckPoint(lat = -32.074682, lng = -52.169831, image = R.drawable.img_ponto_dezessete,
+                    description = "Faixada ICHI - Psicologia", key = 7),
+            CheckPoint(lat = -32.077540, lng = -52.171314, image = R.drawable.img_ponto_dezenove,
+                    description = "Nova Construção", key = 8)
     )
 }

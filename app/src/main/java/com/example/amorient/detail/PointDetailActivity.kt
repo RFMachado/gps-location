@@ -30,8 +30,8 @@ class PointDetailActivity: AppCompatActivity() {
 
         checkPoint?.let {
             imgPoint.setImageResource(it.image)
-            txtTitle.text = it.title
-            txtDescription.text = it.description
+            txtTitle.text = it.description
+            txtDistance.text = it.distance
         }
     }
 
