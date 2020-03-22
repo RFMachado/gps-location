@@ -167,7 +167,9 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
                         if (checkPoint.key == tag) {
                             val pointDistance = getDistanceAzimute(checkPoint)
 
-                            val intent = PointDetailActivity.launchIntent(this@MapsActivity, pointDistance)
+                            val intent = PointDetailActivity.launchIntent(
+                                    this@MapsActivity, pointDistance
+                            )
                             startActivity(intent)
                         }
                     }
@@ -219,11 +221,13 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
             val distance = Utils.distance(
                     myLocation.latitude, point.lat,
                     myLocation.longitude, point.lng
+            ).formatDistance()
+
+            val azimute = Utils.getAzimuteCoordenate(
+                    myLocation.latitude, myLocation.longitude, point.lat, point.lng
             )
 
-            val azimute = Utils.bearing(myLocation.latitude, myLocation.longitude, point.lat, point.lng)
-
-            return point.copy(distance = distance.formatDistance() + azimute)
+            return point.copy(distance = distance + azimute)
         }
 
         return point

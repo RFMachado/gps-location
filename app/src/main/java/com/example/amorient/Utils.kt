@@ -27,7 +27,7 @@ object Utils {
         return deg * Math.PI / 180.0
     }
 
-    fun bearing(lat1: Double, lon1: Double, lat2: Double, lon2: Double): String {
+    fun getAzimuteCoordenate(lat1: Double, lon1: Double, lat2: Double, lon2: Double): String {
         val latitude1 = Math.toRadians(lat1)
         val latitude2 = Math.toRadians(lat2)
 
