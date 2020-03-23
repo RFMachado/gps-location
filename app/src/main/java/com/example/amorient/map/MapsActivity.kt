@@ -234,7 +234,6 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
     }
 
     private fun zoomCurrentPosition(location: Location) {
-        val colorRed = 0xFFF44336.toInt()
         val target = LatLng(location.latitude, location.longitude)
 
         val cameraPosition = CameraPosition.Builder()
@@ -243,42 +242,57 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
                 .bearing(10f)
                 .build()
 
+
+        addPolilyne()
+        mGoogleMap?.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+
+    }
+
+    private fun addPolilyne() {
+        val colorRed = 0xFFF44336.toInt()
+
         val polyline = PolylineOptions()
                 .add(
-                        LatLng(-32.078711, -52.172849),
-                        LatLng(-32.068907, -52.170849)
+                        LatLng(-32.079711, -52.173849),
+                        LatLng(-32.069907, -52.171849)
                 )
 
         val polyline2 = PolylineOptions()
                 .add(
-                        LatLng(-32.078711, -52.169349),
-                        LatLng(-32.068907, -52.167349)
+                        LatLng(-32.079711, -52.170349),
+                        LatLng(-32.069907, -52.168349)
                 )
 
         val polyline3 = PolylineOptions()
                 .add(
-                        LatLng(-32.078711, -52.165849),
-                        LatLng(-32.068907, -52.163849)
+                        LatLng(-32.080711, -52.167849),
+                        LatLng(-32.070907, -52.165849)
                 )
 
         val pol = mGoogleMap?.addPolyline(polyline)
         val pol2 = mGoogleMap?.addPolyline(polyline2)
         val pol3 = mGoogleMap?.addPolyline(polyline3)
 
-        pol?.tag = "A"
-        pol?.color = colorRed
-        pol?.endCap = CustomCap(BitmapDescriptorFactory.fromResource(R.drawable.ic_triangle), 10f)
+        pol?.apply {
+            tag = "A"
+            width = 5f
+            color = colorRed
+            endCap = CustomCap(BitmapDescriptorFactory.fromResource(R.drawable.ic_triangle), 6f)
+        }
 
-        pol2?.tag = "B"
-        pol2?.color = colorRed
-        pol2?.endCap = CustomCap(BitmapDescriptorFactory.fromResource(R.drawable.ic_triangle), 10f)
+        pol2?.apply {
+            tag = "B"
+            width = 5f
+            color = colorRed
+            endCap = CustomCap(BitmapDescriptorFactory.fromResource(R.drawable.ic_triangle), 6f)
+        }
 
-        pol3?.tag = "C"
-        pol3?.color = colorRed
-        pol3?.endCap = CustomCap(BitmapDescriptorFactory.fromResource(R.drawable.ic_triangle), 10f)
-
-        mGoogleMap?.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
-
+        pol3?.apply {
+            tag = "C"
+            width = 5f
+            color = colorRed
+            endCap = CustomCap(BitmapDescriptorFactory.fromResource(R.drawable.ic_triangle), 6f)
+        }
     }
 
     private fun dispatchTakePictureIntent() {
