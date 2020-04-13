@@ -1,7 +1,9 @@
 package com.example.amorient
 
 import com.example.amorient.model.CheckPoint
+import java.util.concurrent.TimeUnit
 import kotlin.math.*
+
 
 object Utils {
 
@@ -47,6 +49,50 @@ object Utils {
         val compasLoc = coordNames[directionid.toInt()]
 
         return "   $compasLoc ${resultDegree.formatAzimute()}"
+    }
+
+    fun parseTimeElapsed(timeElapsed: Long): String {
+        val time = StringBuilder()
+        var millis = timeElapsed
+
+        require(millis >= 0) { "Duração deve ser maior do que zero!" }
+
+        val hours = TimeUnit.MILLISECONDS.toHours(millis)
+        millis -= TimeUnit.HOURS.toMillis(hours)
+
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(millis)
+        millis -= TimeUnit.MINUTES.toMillis(minutes)
+
+        val seconds = TimeUnit.MILLISECONDS.toSeconds(millis)
+
+        if (hours > 0) {
+            time.append(hours)
+
+            if(hours <= 1L)
+                time.append(" hora ")
+            else
+                time.append(" horas ")
+        }
+
+        if (minutes > 0) {
+            time.append(minutes)
+
+            if(minutes <= 1L)
+                time.append(" minuto ")
+            else
+                time.append(" minutos ")
+        }
+
+        if (seconds > 0) {
+            time.append(seconds)
+
+            if(seconds <= 1L)
+                time.append(" segundo")
+            else
+                time.append(" segundos")
+        }
+
+        return time.toString()
     }
 
     fun addPoints() = mutableListOf(

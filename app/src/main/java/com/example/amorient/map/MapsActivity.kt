@@ -31,6 +31,7 @@ import androidx.fragment.app.FragmentActivity
 import com.example.amorient.R
 import com.example.amorient.Utils
 import com.example.amorient.detail.PointDetailActivity
+import com.example.amorient.firstscreen.FirstScreenActivity
 import com.example.amorient.formatDistance
 import com.example.amorient.model.CheckPoint
 import com.google.android.gms.location.*
@@ -40,6 +41,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.activity_maps.*
+import kotlinx.android.synthetic.main.finish_game_dialog.view.*
 
 
 class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener {
@@ -413,6 +415,9 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
                     val timeText = "${totalPoints-checkPoints.size} / $totalPoints"
                     txtTime.text = timeText
 
+                    if (checkPoints.isEmpty())
+                        finishGameDialog()
+
                     return
                 }
             }
@@ -433,6 +438,31 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
             }
 
             create().show()
+        }
+    }
+
+    private fun finishGameDialog() {
+        chronometer.stop()
+        val timeElapsed =  SystemClock.elapsedRealtime() - chronometer.base
+        val duration = Utils.parseTimeElapsed(timeElapsed)
+
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.finish_game_dialog, null)
+
+        val mBuilder = AlertDialog.Builder(this)
+                .setView(dialogView)
+
+        val mAlertDialog = mBuilder.show()
+        mAlertDialog.setCanceledOnTouchOutside(false)
+
+        dialogView.txtTime.text = "Tempo: $duration"
+
+        dialogView.btnOk.setOnClickListener {
+            mAlertDialog.dismiss()
+
+            val intent = FirstScreenActivity.launchIntent(this)
+            startActivity(intent)
+
+            finish()
         }
     }
 

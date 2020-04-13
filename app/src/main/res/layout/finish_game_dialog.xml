@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="20dp"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:textSize="24sp"
+        android:text="Parabéns! \nPercurso concluído"/>
+
+    <TextView
+        android:id="@+id/txtTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        tools:text="Tempo: 1 hora 20 minutos e 1 segundo"
+        android:textColor="@color/black"/>
+
+    <Button
+        android:id="@+id/btnOk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingEnd="20dp"
+        android:layout_marginBottom="60dp"
+        android:layout_gravity="center"
+        android:paddingStart="20dp"
+        android:textSize="20sp"
+        android:text="OK"
+        style="?android:attr/borderlessButtonStyle"
+        android:background="@drawable/bg_stroke_large"/>
+
+</LinearLayout>
