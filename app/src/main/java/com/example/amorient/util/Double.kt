@@ -1,4 +1,4 @@
-package com.example.amorient
+package com.example.amorient.util
 
 import java.text.DecimalFormat
 

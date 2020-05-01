@@ -38,7 +38,7 @@
             android:label="@string/title_activity_maps">
         </activity>
 
-        <activity android:name=".firstscreen.FirstScreenActivity">
+        <activity android:name=".menu.MenuActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -48,6 +48,7 @@
 
         <activity android:name=".start.StartScreenActivity"/>
         <activity android:name=".detail.PointDetailActivity"/>
+        <activity android:name=".create.CreateRouteActivity"/>
     </application>
 
 </manifest>

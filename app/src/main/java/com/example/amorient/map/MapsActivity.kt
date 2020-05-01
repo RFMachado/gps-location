@@ -29,10 +29,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import com.example.amorient.R
-import com.example.amorient.Utils
+import com.example.amorient.util.Utils
 import com.example.amorient.detail.PointDetailActivity
-import com.example.amorient.firstscreen.FirstScreenActivity
-import com.example.amorient.formatDistance
+import com.example.amorient.menu.MenuActivity
+import com.example.amorient.util.formatDistance
 import com.example.amorient.model.CheckPoint
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -459,7 +459,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
         dialogView.btnOk.setOnClickListener {
             mAlertDialog.dismiss()
 
-            val intent = FirstScreenActivity.launchIntent(this)
+            val intent = MenuActivity.launchIntent(this)
             startActivity(intent)
 
             finish()
