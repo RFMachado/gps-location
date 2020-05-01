@@ -29,7 +29,12 @@ class PointDetailActivity: AppCompatActivity() {
         setContentView(R.layout.activity_detail)
 
         checkPoint?.let {
-            imgPoint.setImageResource(it.image)
+            if (it.image == null) {
+                imgPoint.setImageURI(it.imagePath)
+            } else {
+                imgPoint.setImageResource(it.image)
+            }
+
             txtTitle.text = it.description
             txtDistance.text = it.distance
         }

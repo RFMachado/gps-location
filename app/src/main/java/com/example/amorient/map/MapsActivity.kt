@@ -13,6 +13,7 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.location.Location
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Looper
@@ -29,11 +30,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import com.example.amorient.R
-import com.example.amorient.util.Utils
 import com.example.amorient.detail.PointDetailActivity
 import com.example.amorient.menu.MenuActivity
-import com.example.amorient.util.formatDistance
 import com.example.amorient.model.CheckPoint
+import com.example.amorient.util.Utils
+import com.example.amorient.util.formatDistance
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -188,7 +189,10 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
         }
 
         checkPoints.forEachIndexed { index, checkPoint ->
-            val image = getMarkerBitmapFromView(checkPoint.image)
+            val image = if(checkPoint.image == null)
+                getMarkerBitmapFromUri(checkPoint.imagePath)
+            else
+                getMarkerBitmapFromView(checkPoint.image)
 
             val markerOptions = MarkerOptions()
                     .position(LatLng(checkPoint.lat, checkPoint.lng))
@@ -355,6 +359,10 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
             }
             return
         }
+    }
+
+    private fun getMarkerBitmapFromUri(imageUri: Uri?): Bitmap {
+        return  MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
     }
 
     private fun getMarkerBitmapFromView(@DrawableRes resId: Int): Bitmap {

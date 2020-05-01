@@ -48,6 +48,8 @@
             android:id="@+id/edtname"
             android:layout_width="match_parent"
             android:imeOptions="actionNext"
+            android:maxLines="1"
+            android:inputType="text"
             android:background="@drawable/bg_retangule"
             android:layout_height="40dp"
             android:paddingStart="5dp"
@@ -86,6 +88,8 @@
                     android:id="@+id/edtLat"
                     android:layout_width="match_parent"
                     android:imeOptions="actionNext"
+                    android:maxLines="1"
+                    android:inputType="text"
                     android:background="@drawable/bg_retangule"
                     android:layout_height="40dp"
                     android:paddingStart="5dp"
@@ -120,6 +124,8 @@
                     android:id="@+id/edtLng"
                     android:layout_width="match_parent"
                     android:imeOptions="actionNext"
+                    android:maxLines="1"
+                    android:inputType="text"
                     android:background="@drawable/bg_retangule"
                     android:layout_height="40dp"
                     android:paddingStart="5dp"
@@ -167,6 +173,7 @@
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
