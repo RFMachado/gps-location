@@ -33,8 +33,6 @@ class MenuActivity: AppCompatActivity() {
         btnCreate.setOnClickListener {
             val intent = CreateRouteActivity.launchIntent(this)
             startActivity(intent)
-
-            finish()
         }
     }
 }

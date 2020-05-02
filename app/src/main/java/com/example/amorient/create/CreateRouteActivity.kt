@@ -20,6 +20,12 @@ class CreateRouteActivity: AppCompatActivity() {
     private var imagePath: Uri? = null
     private var items = mutableListOf<CheckPoint>()
 
+    private val regexLat =
+            "^([+\\-])?(?:90(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\\.[0-9]{1,6})?))\$".toRegex()
+
+    private val regexLng =
+            "^([+\\-])?(?:180(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\\.[0-9]{1,6})?))\$".toRegex()
+
     companion object {
         fun launchIntent(context: Context): Intent {
             return Intent(context, CreateRouteActivity::class.java)
@@ -60,7 +66,7 @@ class CreateRouteActivity: AppCompatActivity() {
         val lat = edtLat.text.toString()
         val lng = edtLng.text.toString()
 
-        if (name.isNotBlank() && lat.isNotBlank() && lng.isNotBlank() && imagePath != null) {
+        if (validateFields(name, lat, lng)) {
             items.add(
                     CheckPoint(
                             description = name,
@@ -74,16 +80,34 @@ class CreateRouteActivity: AppCompatActivity() {
             adapter?.notifyItemInserted(items.lastIndex)
 
             clearAllFields()
-        } else {
-            toast("Preencha todos os campos")
         }
     }
+
+    private fun validateFields(name: String, lat: String, lng: String): Boolean {
+        if (name.isNotBlank() && lat.isNotBlank() && lng.isNotBlank() && imagePath != null) {
+            return isValidCoordenates(lat, lng)
+        } else {
+            toast("Preencha todos os campos")
+            return false
+        }
+    }
+
+    private fun isValidCoordenates(lat: String, lng: String): Boolean {
+        val isValid = regexLat.matches(lat) && regexLng.matches(lng)
+
+        if(!isValid)
+            toast("Verifique as coordenadas")
+
+        return isValid
+    }
+
 
     private fun clearAllFields() {
         edtname.text?.clear()
         edtLat.text?.clear()
         edtLng.text?.clear()
         imagePath = null
+        imgRoute.setImageURI(null)
     }
 
     private fun generateKey(): Int {
