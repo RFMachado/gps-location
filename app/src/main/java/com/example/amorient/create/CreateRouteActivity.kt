@@ -67,7 +67,7 @@ class CreateRouteActivity: AppCompatActivity() {
 
         btnSave.setOnClickListener {
             preferences.set(Consts.CHECK_POINT_LIST, items)
-            toast("Percurso salvo!", Toast.LENGTH_LONG)
+            toast("Percurso salvo com sucesso!", Toast.LENGTH_LONG)
 
             finish()
         }
