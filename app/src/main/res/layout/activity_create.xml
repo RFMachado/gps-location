@@ -11,15 +11,31 @@
         android:layout_height="50dp"
         android:orientation="vertical">
 
-        <TextView
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="Criar Percurso"
-            android:gravity="center"
-            android:textSize="23sp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"/>
+            android:layout_weight="1">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Criar Percurso"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="23sp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"/>
+
+            <ImageView
+                android:id="@+id/btnSave"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:scaleType="center"
+                android:layout_gravity="end"
+                android:src="@drawable/save_button_selector"/>
+
+        </FrameLayout>
 
         <View
             android:layout_width="match_parent"
@@ -141,7 +157,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -162,15 +178,22 @@
         <Button
             android:id="@+id/btnCreate"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:paddingEnd="20dp"
-            android:paddingStart="20dp"
-            android:textSize="20sp"
-            android:text="CRIAR"
+            android:layout_height="30dp"
+            android:textSize="18sp"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:text="ADICIONAR"
             style="?android:attr/borderlessButtonStyle"
             android:background="@drawable/bg_stroke_large"/>
 
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:background="@color/black"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

@@ -34,7 +34,7 @@ import com.example.amorient.detail.PointDetailActivity
 import com.example.amorient.menu.MenuActivity
 import com.example.amorient.model.CheckPoint
 import com.example.amorient.util.Utils
-import com.example.amorient.util.formatDistance
+import com.example.amorient.util.extensions.formatDistance
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap

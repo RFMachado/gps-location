@@ -6,19 +6,24 @@ import android.content.Intent
 import android.content.Intent.ACTION_PICK
 import android.net.Uri
 import android.os.Bundle
+import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.amorient.R
 import com.example.amorient.map.MapsActivity
 import com.example.amorient.model.CheckPoint
-import com.example.amorient.util.toast
+import com.example.amorient.util.AmorientPreferences
+import com.example.amorient.util.Consts
+import com.example.amorient.util.extensions.toast
 import kotlinx.android.synthetic.main.activity_create.*
-
 
 class CreateRouteActivity: AppCompatActivity() {
 
-    private var adapter: CreateAdapter? = null
-    private var imagePath: Uri? = null
     private var items = mutableListOf<CheckPoint>()
+    private var imagePath: Uri? = null
+    private var adapter: CreateAdapter? = null
+    private val preferences = AmorientPreferences(this)
 
     private val regexLat =
             "^([+\\-])?(?:90(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\\.[0-9]{1,6})?))\$".toRegex()
@@ -40,12 +45,17 @@ class CreateRouteActivity: AppCompatActivity() {
     }
 
     private fun bindListener() {
+        checkSaveButtonEnable()
+
         adapter = CreateAdapter(items) { position ->
             items.removeAt(position)
             adapter?.notifyItemRemoved(position)
+
+            checkSaveButtonEnable()
         }
 
         recyclerView.adapter = adapter
+        recyclerView.addItemDecoration(DividerItemDecoration(this, LinearLayout.VERTICAL))
 
         btnPhoto.setOnClickListener {
             dispatchTakePictureIntent()
@@ -53,6 +63,13 @@ class CreateRouteActivity: AppCompatActivity() {
 
         btnCreate.setOnClickListener {
             inserItemOnList()
+        }
+
+        btnSave.setOnClickListener {
+            preferences.set(Consts.CHECK_POINT_LIST, items)
+            toast("Percurso salvo!", Toast.LENGTH_LONG)
+
+            finish()
         }
 
         imgRoute.setOnClickListener {
@@ -79,6 +96,8 @@ class CreateRouteActivity: AppCompatActivity() {
 
             adapter?.notifyItemInserted(items.lastIndex)
 
+            checkSaveButtonEnable()
+
             clearAllFields()
         }
     }
@@ -101,6 +120,10 @@ class CreateRouteActivity: AppCompatActivity() {
         return isValid
     }
 
+
+    private fun checkSaveButtonEnable() {
+        btnSave.isEnabled = items.size >= 5
+    }
 
     private fun clearAllFields() {
         edtname.text?.clear()

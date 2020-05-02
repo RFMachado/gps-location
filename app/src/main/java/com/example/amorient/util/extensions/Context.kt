@@ -1,4 +1,4 @@
-package com.example.amorient.util
+package com.example.amorient.util.extensions
 
 import android.content.Context
 import android.widget.Toast

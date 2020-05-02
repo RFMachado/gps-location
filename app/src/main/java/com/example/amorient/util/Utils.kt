@@ -2,6 +2,7 @@ package com.example.amorient.util
 
 import com.example.amorient.R
 import com.example.amorient.model.CheckPoint
+import com.example.amorient.util.extensions.formatAzimute
 import java.util.concurrent.TimeUnit
 import kotlin.math.*
 

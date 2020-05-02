@@ -1,12 +1,11 @@
 package com.example.amorient.create
 
-import android.net.Uri
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.amorient.R
 import com.example.amorient.model.CheckPoint
-import com.example.amorient.util.inflate
+import com.example.amorient.util.extensions.inflate
 import kotlinx.android.synthetic.main.check_point_view_holder.view.*
 
 class CreateAdapter(
