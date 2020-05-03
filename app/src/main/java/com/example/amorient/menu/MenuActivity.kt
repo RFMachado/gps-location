@@ -6,7 +6,11 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.amorient.R
 import com.example.amorient.create.CreateRouteActivity
+import com.example.amorient.model.Route
 import com.example.amorient.start.StartScreenActivity
+import com.example.amorient.util.AmorientPreferences
+import com.example.amorient.util.Consts
+import com.example.amorient.util.Utils
 import kotlinx.android.synthetic.main.activity_menu.*
 
 class MenuActivity: AppCompatActivity() {
@@ -19,6 +23,11 @@ class MenuActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
 
+        bindListener()
+        checkNeedAddDefaultList()
+    }
+
+    private fun bindListener() {
         btnPlay.setOnClickListener {
             val intent = StartScreenActivity.launchIntent(this)
             startActivity(intent)
@@ -33,6 +42,18 @@ class MenuActivity: AppCompatActivity() {
         btnCreate.setOnClickListener {
             val intent = CreateRouteActivity.launchIntent(this)
             startActivity(intent)
+        }
+    }
+
+    private fun checkNeedAddDefaultList() {
+        val preferences = AmorientPreferences(this)
+        val routes = preferences.get<MutableList<Route>>(Consts.ROUTE_LIST) ?: mutableListOf()
+
+        if(routes.isEmpty()) {
+            val route = Route(checkpoints = Utils.getPoints())
+
+            routes.add(route)
+            preferences.set(Consts.ROUTE_LIST, routes)
         }
     }
 }

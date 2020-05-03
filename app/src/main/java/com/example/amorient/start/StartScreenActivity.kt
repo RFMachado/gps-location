@@ -26,21 +26,6 @@ class StartScreenActivity: AppCompatActivity() {
             checkIndividual.isChecked = false
         }
 
-        checkMedium.setOnClickListener {
-            checkEasy.isChecked = false
-            checkHard.isChecked = false
-        }
-
-        checkEasy.setOnClickListener {
-            checkMedium.isChecked = false
-            checkHard.isChecked = false
-        }
-
-        checkHard.setOnClickListener {
-            checkMedium.isChecked = false
-            checkEasy.isChecked = false
-        }
-
         btnStart.setOnClickListener {
             val intent = MapsActivity.launchIntent(this)
             startActivity(intent)

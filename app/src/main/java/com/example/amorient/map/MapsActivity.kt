@@ -92,7 +92,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         startCompass()
 
-        checkPoints = Utils.addPoints()
+        checkPoints = Utils.getPoints()
         totalPoints = checkPoints.size
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 

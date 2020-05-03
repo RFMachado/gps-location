@@ -31,7 +31,6 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,7 +38,6 @@
         android:layout_marginTop="30dp"
         android:textColor="@color/black"
         android:text="Modo"/>
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -50,7 +48,7 @@
 
         <CheckBox
             android:id="@+id/checkIndividual"
-            android:text="Individual"
+            android:text="Dupla"
             android:layout_marginRight="50dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
@@ -62,7 +60,6 @@
             android:layout_height="wrap_content"/>
     </LinearLayout>
 
-
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -70,42 +67,6 @@
         android:layout_marginEnd="16dp"
         android:layout_marginTop="30dp"
         android:background="@color/black"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginStart="16dp"
-        android:textColor="@color/black"
-        android:text="Dificuldade"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <CheckBox
-            android:id="@+id/checkEasy"
-            android:text="Fácil"
-            android:layout_marginRight="40dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <CheckBox
-            android:id="@+id/checkMedium"
-            android:text="Médio"
-            android:layout_marginRight="40dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <CheckBox
-            android:id="@+id/checkHard"
-            android:text="Difícil"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
 
     <Button
         android:id="@+id/btnStart"

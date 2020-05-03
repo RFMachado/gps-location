@@ -97,7 +97,7 @@ object Utils {
         return time.toString()
     }
 
-    fun addPoints() = mutableListOf(
+    fun getPoints() = mutableListOf(
             CheckPoint(lat = -32.075706, lng = -52.171241, image = R.drawable.img_ponto_um,
                      description = "Mural CAIC - FURG", key = 1),
             CheckPoint(lat = -32.076275, lng = -52.170570, image = R.drawable.img_ponto_dois,

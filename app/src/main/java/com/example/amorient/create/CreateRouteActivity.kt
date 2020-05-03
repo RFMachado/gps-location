@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.amorient.R
 import com.example.amorient.map.MapsActivity
 import com.example.amorient.model.CheckPoint
+import com.example.amorient.model.Route
 import com.example.amorient.util.AmorientPreferences
 import com.example.amorient.util.Consts
 import com.example.amorient.util.extensions.toast
@@ -66,9 +67,12 @@ class CreateRouteActivity: AppCompatActivity() {
         }
 
         btnSave.setOnClickListener {
-            preferences.set(Consts.CHECK_POINT_LIST, items)
-            toast("Percurso salvo com sucesso!", Toast.LENGTH_LONG)
+            val routes = preferences.get<MutableList<Route>>(Consts.ROUTE_LIST) ?: mutableListOf()
+            routes.add(Route(checkpoints = items))
 
+            preferences.set(Consts.ROUTE_LIST, routes)
+
+            toast("Percurso salvo com sucesso!", Toast.LENGTH_LONG)
             finish()
         }
 
