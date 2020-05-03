@@ -1,7 +1,9 @@
 package com.example.amorient.util
 
+import android.content.Context
 import com.example.amorient.R
 import com.example.amorient.model.CheckPoint
+import com.example.amorient.model.Route
 import com.example.amorient.util.extensions.formatAzimute
 import java.util.concurrent.TimeUnit
 import kotlin.math.*
@@ -95,6 +97,13 @@ object Utils {
         }
 
         return time.toString()
+    }
+
+    fun getRouteSelected(context: Context, position: Int): MutableList<CheckPoint> {
+        val preferences = AmorientPreferences(context)
+        val routes = preferences.get<MutableList<Route>>(Consts.ROUTE_LIST) ?: mutableListOf()
+
+        return routes[position].checkpoints.toMutableList()
     }
 
     fun getPoints() = mutableListOf(

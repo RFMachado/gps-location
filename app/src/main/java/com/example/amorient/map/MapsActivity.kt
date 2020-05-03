@@ -14,10 +14,7 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.location.Location
 import android.net.Uri
-import android.os.Build
-import android.os.Bundle
-import android.os.Looper
-import android.os.SystemClock
+import android.os.*
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
@@ -43,6 +40,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.activity_maps.*
 import kotlinx.android.synthetic.main.finish_game_dialog.view.*
+import java.util.ArrayList
 
 
 class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener {
@@ -76,13 +74,22 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
     var haveSensorMagnetometer = false
     var haveSensorRotationVector = false
 
+    private val positionRoute by lazy {
+        intent.getIntExtra(EXTRA_CHECK_POINTS, 0)
+    }
+
     companion object {
         const val REQUEST_IMAGE_CAPTURE = 1
         const val MY_PERMISSIONS_REQUEST_LOCATION = 99
         const val INTERVAL_CHECK_LOCATION = 500L //  120000 two minute interval
 
-        fun launchIntent(context: Context) = Intent(context, MapsActivity::class.java)
+        private const val EXTRA_CHECK_POINTS = "checkPointsPosition"
 
+        fun launchIntent(context: Context, positionRoute: Int): Intent {
+            return Intent(context, MapsActivity::class.java).apply {
+                putExtra(EXTRA_CHECK_POINTS, positionRoute)
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,7 +99,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         startCompass()
 
-        checkPoints = Utils.getPoints()
+        checkPoints = Utils.getRouteSelected(this, positionRoute)
         totalPoints = checkPoints.size
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
