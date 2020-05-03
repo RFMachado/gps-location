@@ -1,5 +1,6 @@
 package com.example.amorient.model
 
 data class Route(
-        private val checkpoints: List<CheckPoint>
+    private val name: String,
+    private val checkpoints: List<CheckPoint>
 )

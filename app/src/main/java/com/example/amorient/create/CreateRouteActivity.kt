@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.Intent.ACTION_PICK
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -24,7 +25,6 @@ class CreateRouteActivity: AppCompatActivity() {
     private var items = mutableListOf<CheckPoint>()
     private var imagePath: Uri? = null
     private var adapter: CreateAdapter? = null
-    private val preferences = AmorientPreferences(this)
 
     private val regexLat =
             "^([+\\-])?(?:90(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\\.[0-9]{1,6})?))\$".toRegex()
@@ -67,19 +67,37 @@ class CreateRouteActivity: AppCompatActivity() {
         }
 
         btnSave.setOnClickListener {
-            val routes = preferences.get<MutableList<Route>>(Consts.ROUTE_LIST) ?: mutableListOf()
-            routes.add(Route(checkpoints = items))
+            layoutRouteName.visibility = View.VISIBLE
+        }
 
-            preferences.set(Consts.ROUTE_LIST, routes)
+        txtOk.setOnClickListener {
+            saveAndFinish(edtRouteName.text.toString())
+        }
 
-            toast("Percurso salvo com sucesso!", Toast.LENGTH_LONG)
-            finish()
+        txtCancel.setOnClickListener {
+            layoutRouteName.visibility = View.GONE
         }
 
         imgRoute.setOnClickListener {
             imagePath = null
             imgRoute.setImageURI(null)
         }
+    }
+
+    private fun saveAndFinish(routeName: String) {
+        if(routeName.isEmpty()) {
+            toast("Insira um nome para o percurso")
+            return
+        }
+
+        val preferences = AmorientPreferences(this)
+        val routes = preferences.get<MutableList<Route>>(Consts.ROUTE_LIST) ?: mutableListOf()
+        routes.add(Route(name = routeName, checkpoints = items))
+
+        preferences.set(Consts.ROUTE_LIST, routes)
+
+        toast("Percurso salvo com sucesso!", Toast.LENGTH_LONG)
+        finish()
     }
 
     private fun inserItemOnList() {

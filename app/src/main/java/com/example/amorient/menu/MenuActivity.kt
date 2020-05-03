@@ -50,7 +50,7 @@ class MenuActivity: AppCompatActivity() {
         val routes = preferences.get<MutableList<Route>>(Consts.ROUTE_LIST) ?: mutableListOf()
 
         if(routes.isEmpty()) {
-            val route = Route(checkpoints = Utils.getPoints())
+            val route = Route(name = "CAIC", checkpoints = Utils.getPoints())
 
             routes.add(route)
             preferences.set(Consts.ROUTE_LIST, routes)
