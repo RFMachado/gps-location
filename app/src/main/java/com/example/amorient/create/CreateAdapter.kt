@@ -1,5 +1,6 @@
 package com.example.amorient.create
 
+import android.net.Uri
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -20,7 +21,7 @@ class CreateAdapter(
         txtLat.text = "Lat: ${item.lat}"
         txtLng.text = "Lng: ${item.lng}"
 
-        imgPoint.setImageURI(item.imagePath)
+        imgPoint.setImageURI(Uri.parse(item.imagePath))
 
         btnRemove.setOnClickListener {
             listener.invoke(holder.adapterPosition)

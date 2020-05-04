@@ -14,14 +14,16 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.location.Location
 import android.net.Uri
-import android.os.*
+import android.os.Build
+import android.os.Bundle
+import android.os.Looper
+import android.os.SystemClock
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.MeasureSpec.UNSPECIFIED
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -32,6 +34,7 @@ import com.example.amorient.menu.MenuActivity
 import com.example.amorient.model.CheckPoint
 import com.example.amorient.util.Utils
 import com.example.amorient.util.extensions.formatDistance
+import com.example.amorient.util.extensions.toast
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -40,7 +43,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.activity_maps.*
 import kotlinx.android.synthetic.main.finish_game_dialog.view.*
-import java.util.ArrayList
 
 
 class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener {
@@ -81,6 +83,8 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
     companion object {
         const val REQUEST_IMAGE_CAPTURE = 1
         const val MY_PERMISSIONS_REQUEST_LOCATION = 99
+        const val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123
+
         const val INTERVAL_CHECK_LOCATION = 500L //  120000 two minute interval
 
         private const val EXTRA_CHECK_POINTS = "checkPointsPosition"
@@ -196,10 +200,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
         }
 
         checkPoints.forEachIndexed { index, checkPoint ->
-            val image = if(checkPoint.image == null)
-                getMarkerBitmapFromUri(checkPoint.imagePath)
-            else
-                getMarkerBitmapFromView(checkPoint.image)
+            val image = getMarkerBitmapFromView(checkPoint)
 
             val markerOptions = MarkerOptions()
                     .position(LatLng(checkPoint.lat, checkPoint.lng))
@@ -317,7 +318,10 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
     }
 
     private fun checkLocationPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED) {
 
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
@@ -345,8 +349,10 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult (
+            requestCode: Int,
+            permissions: Array<String>, grantResults: IntArray
+    ) {
         if (requestCode == MY_PERMISSIONS_REQUEST_LOCATION) {
             // If request is cancelled, the result arrays are empty.
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -368,17 +374,24 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
         }
     }
 
-    private fun getMarkerBitmapFromUri(imageUri: Uri?): Bitmap {
-        return  MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
-    }
+    private fun getMarkerBitmapFromView(checkPoint: CheckPoint): Bitmap {
 
-    private fun getMarkerBitmapFromView(@DrawableRes resId: Int): Bitmap {
+        val resId = checkPoint.image ?: Uri.parse(checkPoint.imagePath)
 
         val customMarkerView = (getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
                 .inflate(R.layout.view_custom_marker, null)
 
         val markerImageView = customMarkerView.findViewById(R.id.profile_image) as ImageView
-        markerImageView.setImageResource(resId)
+
+        when (resId) {
+            is Int -> {
+                markerImageView.setImageResource(resId)
+            }
+            is Uri -> {
+                markerImageView.setImageURI(resId)
+            }
+        }
+
         customMarkerView.measure(UNSPECIFIED, UNSPECIFIED)
         customMarkerView.layout(0, 0, customMarkerView.measuredWidth, customMarkerView.measuredHeight)
 
@@ -481,8 +494,6 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
         }
     }
 
-
-
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) { }
     override fun onSensorChanged(event: SensorEvent?) {
         if (event?.sensor?.type == Sensor.TYPE_ROTATION_VECTOR) {
@@ -508,8 +519,6 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
         imgCompass.rotation = (-azimuth).toFloat()
     }
 
-
-
     private fun startCompass() {
         if (sensorManager!!.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR) == null) {
             if (sensorManager!!.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) == null ||
@@ -534,8 +543,8 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
         if(haveSensorAccelerometer) sensorManager!!.unregisterListener(this, accelerometer)
     }
 
-    fun noSensorAlert() {
-
+    private fun noSensorAlert() {
+        toast("Dispositivo não possui sensor para o uso da bússula")
     }
 
     override fun onResume() {

@@ -1,11 +1,18 @@
 package com.example.amorient.menu
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.example.amorient.R
 import com.example.amorient.create.CreateRouteActivity
+import com.example.amorient.map.MapsActivity
 import com.example.amorient.model.Route
 import com.example.amorient.start.StartScreenActivity
 import com.example.amorient.util.AmorientPreferences
@@ -29,10 +36,12 @@ class MenuActivity: AppCompatActivity() {
 
     private fun bindListener() {
         btnPlay.setOnClickListener {
-            val intent = StartScreenActivity.launchIntent(this)
-            startActivity(intent)
+            if (checkPermissionExernalStorage()) {
+                val intent = StartScreenActivity.launchIntent(this)
+                startActivity(intent)
 
-            finish()
+                finish()
+            }
         }
 
         btnExit.setOnClickListener {
@@ -55,5 +64,43 @@ class MenuActivity: AppCompatActivity() {
             routes.add(route)
             preferences.set(Consts.ROUTE_LIST, routes)
         }
+    }
+
+    fun checkPermissionExernalStorage(): Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this,
+                            Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(
+                                this,
+                                Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    showDialogPermission("External storage", Manifest.permission.READ_EXTERNAL_STORAGE)
+                } else {
+                    ActivityCompat
+                            .requestPermissions(
+                                    this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                                    MapsActivity.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE)
+                }
+
+                return false
+            } else {
+                return true
+            }
+        }
+        return true
+    }
+
+    private fun showDialogPermission(msg: String, permission: String) {
+        val alertBuilder = AlertDialog.Builder(this).apply {
+            setCancelable(true)
+            setTitle("Permissão necessária")
+            setMessage("$msg permissão é necessária")
+        }
+
+        alertBuilder.setPositiveButton(android.R.string.yes) { _, _ ->
+            ActivityCompat.requestPermissions(this@MenuActivity, arrayOf(permission),
+                    MapsActivity.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE)
+        }
+
+        alertBuilder.create().show()
     }
 }

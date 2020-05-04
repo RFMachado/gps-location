@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.activity_create.*
 class CreateRouteActivity: AppCompatActivity() {
 
     private var items = mutableListOf<CheckPoint>()
-    private var imagePath: Uri? = null
+    private var imagePath: String? = null
     private var adapter: CreateAdapter? = null
 
     private val regexLat =
@@ -173,8 +173,8 @@ class CreateRouteActivity: AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == MapsActivity.REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-            imagePath = data?.data
-            imgRoute.setImageURI(imagePath)
+            imagePath = data?.data.toString()
+            imgRoute.setImageURI(data?.data)
         }
     }
 

@@ -2,6 +2,7 @@ package com.example.amorient.detail
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.amorient.R
@@ -30,7 +31,7 @@ class PointDetailActivity: AppCompatActivity() {
 
         checkPoint?.let {
             if (it.image == null) {
-                imgPoint.setImageURI(it.imagePath)
+                imgPoint.setImageURI(Uri.parse(it.imagePath))
             } else {
                 imgPoint.setImageResource(it.image)
             }
