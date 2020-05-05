@@ -52,6 +52,7 @@
         <activity android:name=".start.StartScreenActivity"/>
         <activity android:name=".detail.PointDetailActivity"/>
         <activity android:name=".create.CreateRouteActivity"/>
+        <activity android:name=".result.ResultsActivity"/>
     </application>
 
 </manifest>

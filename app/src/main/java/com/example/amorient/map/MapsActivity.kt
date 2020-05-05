@@ -32,6 +32,10 @@ import com.example.amorient.R
 import com.example.amorient.detail.PointDetailActivity
 import com.example.amorient.menu.MenuActivity
 import com.example.amorient.model.CheckPoint
+import com.example.amorient.model.Route
+import com.example.amorient.model.TeamResult
+import com.example.amorient.util.AmorientPreferences
+import com.example.amorient.util.Consts
 import com.example.amorient.util.Utils
 import com.example.amorient.util.extensions.formatDistance
 import com.example.amorient.util.extensions.toast
@@ -80,6 +84,8 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
         intent.getIntExtra(EXTRA_CHECK_POINTS, 0)
     }
 
+    private val teamData by lazy { intent.getParcelableExtra<TeamResult>(EXTRA_TEAM_DATA) }
+
     companion object {
         const val REQUEST_IMAGE_CAPTURE = 1
         const val MY_PERMISSIONS_REQUEST_LOCATION = 99
@@ -88,10 +94,12 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
         const val INTERVAL_CHECK_LOCATION = 500L //  120000 two minute interval
 
         private const val EXTRA_CHECK_POINTS = "checkPointsPosition"
+        private const val EXTRA_TEAM_DATA = "teamResultData"
 
-        fun launchIntent(context: Context, positionRoute: Int): Intent {
+        fun launchIntent(context: Context, positionRoute: Int, teamResult: TeamResult): Intent {
             return Intent(context, MapsActivity::class.java).apply {
                 putExtra(EXTRA_CHECK_POINTS, positionRoute)
+                putExtra(EXTRA_TEAM_DATA, teamResult)
             }
         }
     }
@@ -495,6 +503,8 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
 
         dialogView.txtTime.text = "Tempo: $duration"
 
+        saveResults(duration)
+
         dialogView.btnOk.setOnClickListener {
             mAlertDialog.dismiss()
 
@@ -503,6 +513,16 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
 
             finish()
         }
+    }
+
+    private fun saveResults(duration: String) {
+        val preferences = AmorientPreferences(this)
+        val teams = preferences.get<MutableList<TeamResult>>(Consts.TEAMS_RESULT_LIST) ?: mutableListOf()
+
+        teamData.duration = duration
+        teams.add(teamData)
+
+        preferences.set(Consts.TEAMS_RESULT_LIST, teams)
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) { }

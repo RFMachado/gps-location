@@ -14,6 +14,7 @@ import com.example.amorient.R
 import com.example.amorient.create.CreateRouteActivity
 import com.example.amorient.map.MapsActivity
 import com.example.amorient.model.Route
+import com.example.amorient.result.ResultsActivity
 import com.example.amorient.start.StartScreenActivity
 import com.example.amorient.util.AmorientPreferences
 import com.example.amorient.util.Consts
@@ -44,8 +45,13 @@ class MenuActivity: AppCompatActivity() {
             }
         }
 
-        btnExit.setOnClickListener {
-            finish()
+        btnTutorial.setOnClickListener {
+
+        }
+
+        btnResults.setOnClickListener {
+            val intent = ResultsActivity.launchIntent(this)
+            startActivity(intent)
         }
 
         btnCreate.setOnClickListener {

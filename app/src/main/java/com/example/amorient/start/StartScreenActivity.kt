@@ -6,9 +6,10 @@ import android.os.Bundle
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
-import com.example.amorient.map.MapsActivity
 import com.example.amorient.R
+import com.example.amorient.map.MapsActivity
 import com.example.amorient.model.Route
+import com.example.amorient.model.TeamResult
 import com.example.amorient.util.AmorientPreferences
 import com.example.amorient.util.Consts
 import com.example.amorient.util.extensions.toast
@@ -33,7 +34,7 @@ class StartScreenActivity: AppCompatActivity() {
 
     private fun bindListener() {
         val preferences = AmorientPreferences(this)
-       routes = preferences.get<MutableList<Route>>(Consts.ROUTE_LIST)!!
+        routes = preferences.get<MutableList<Route>>(Consts.ROUTE_LIST)!!
 
         recyclerView.adapter = RoutesAdapter(routes) { position ->
             lastSelectedPosition?.let { lastPosition ->
@@ -53,16 +54,23 @@ class StartScreenActivity: AppCompatActivity() {
 
 
         checkIndividual.setOnClickListener {
-            checkEquipe.isChecked = false
+            checkDupla.isChecked = false
         }
 
-        checkEquipe.setOnClickListener {
+        checkDupla.setOnClickListener {
             checkIndividual.isChecked = false
         }
 
         btnStart.setOnClickListener {
             if (lastSelectedPosition != null) {
-                val intent = MapsActivity.launchIntent(this, lastSelectedPosition!!)
+                val mode = if (checkDupla.isChecked) "dupla" else "equipe"
+                val teamName = edtName.text.toString()
+
+                val intent = MapsActivity.launchIntent(
+                        this,
+                        lastSelectedPosition!!,
+                        TeamResult(teamName = teamName, mode = mode, duration = "")
+                )
                 startActivity(intent)
 
                 finish()
