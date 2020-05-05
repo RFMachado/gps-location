@@ -110,7 +110,18 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
         mapFrag = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFrag?.getMapAsync(this)
 
+
+        initLayoutFirstStep(checkPoints.first())
         bindListener()
+    }
+
+    private fun initLayoutFirstStep(point: CheckPoint) {
+        when (val image = point.image ?: Uri.parse(point.imagePath)) {
+            is Int -> imgFirstPoint.setImageResource(image)
+            is Uri -> imgFirstPoint.setImageURI(image)
+        }
+
+        txtTitle.text = point.description
     }
 
     private fun bindListener() {
@@ -427,7 +438,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
                 )
 
                 if(distance <= 25) {
-                    if (checkPoints[index].key == 1) {
+                    if (checkPoints[index].isFirst) {
                         layoutFirstStep.visibility = View.GONE
                         openDialog()
                     }

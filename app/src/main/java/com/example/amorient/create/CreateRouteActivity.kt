@@ -90,6 +90,8 @@ class CreateRouteActivity: AppCompatActivity() {
             return
         }
 
+        items.first().isFirst = true
+
         val preferences = AmorientPreferences(this)
         val routes = preferences.get<MutableList<Route>>(Consts.ROUTE_LIST) ?: mutableListOf()
         routes.add(Route(name = routeName, checkpoints = items))

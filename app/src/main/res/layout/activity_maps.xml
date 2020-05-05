@@ -26,8 +26,7 @@
         android:id="@+id/layoutFirstStep"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        android:visibility="gone">
+        android:background="@color/white">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -114,21 +113,23 @@
             </LinearLayout>
 
             <ImageView
+                android:id="@+id/imgFirstPoint"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16sp"
                 android:layout_marginTop="40sp"
                 android:scaleType="fitXY"
-                android:src="@drawable/img_ponto_um"/>
+                tools:src="@drawable/img_ponto_um"/>
 
             <TextView
+                android:id="@+id/txtTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="15dp"
                 android:textSize="28sp"
-                android:text="Mural CAIC"/>
+                tools:text="Mural CAIC"/>
 
             <View
                 android:layout_width="1dp"

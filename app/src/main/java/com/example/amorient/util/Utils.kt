@@ -108,7 +108,7 @@ object Utils {
 
     fun getPoints() = mutableListOf(
             CheckPoint(lat = -32.075706, lng = -52.171241, image = R.drawable.img_ponto_um,
-                     description = "Mural CAIC - FURG", key = 1),
+                     description = "Mural CAIC - FURG", key = 1, isFirst = true),
             CheckPoint(lat = -32.076275, lng = -52.170570, image = R.drawable.img_ponto_dois,
                     description = "Sistema de caixas d'água", key = 2),
             CheckPoint(lat = -32.075283, lng = -52.173188, image = R.drawable.img_ponto_quatro,

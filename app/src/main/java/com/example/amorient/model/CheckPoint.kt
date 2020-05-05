@@ -11,5 +11,6 @@ data class CheckPoint(
     val distance: String = "",
     val image: Int? = null,
     val imagePath: String? = null,
-    val key: Int
+    val key: Int,
+    var isFirst: Boolean = false
 ): Parcelable
