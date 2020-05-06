@@ -32,7 +32,6 @@ import com.example.amorient.R
 import com.example.amorient.detail.PointDetailActivity
 import com.example.amorient.menu.MenuActivity
 import com.example.amorient.model.CheckPoint
-import com.example.amorient.model.Route
 import com.example.amorient.model.TeamResult
 import com.example.amorient.util.AmorientPreferences
 import com.example.amorient.util.Consts
@@ -275,57 +274,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
                 .bearing(10f)
                 .build()
 
-
-        addPolilyne()
         mGoogleMap?.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
-
-    }
-
-    private fun addPolilyne() {
-        val colorRed = 0xFFF44336.toInt()
-
-        val polyline = PolylineOptions()
-                .add(
-                        LatLng(-32.079711, -52.173849),
-                        LatLng(-32.069907, -52.171849)
-                )
-
-        val polyline2 = PolylineOptions()
-                .add(
-                        LatLng(-32.079711, -52.170349),
-                        LatLng(-32.069907, -52.168349)
-                )
-
-        val polyline3 = PolylineOptions()
-                .add(
-                        LatLng(-32.080711, -52.167849),
-                        LatLng(-32.070907, -52.165849)
-                )
-
-        val pol = mGoogleMap?.addPolyline(polyline)
-        val pol2 = mGoogleMap?.addPolyline(polyline2)
-        val pol3 = mGoogleMap?.addPolyline(polyline3)
-
-        pol?.apply {
-            tag = "A"
-            width = 5f
-            color = colorRed
-            endCap = CustomCap(BitmapDescriptorFactory.fromResource(R.drawable.ic_triangle), 6f)
-        }
-
-        pol2?.apply {
-            tag = "B"
-            width = 5f
-            color = colorRed
-            endCap = CustomCap(BitmapDescriptorFactory.fromResource(R.drawable.ic_triangle), 6f)
-        }
-
-        pol3?.apply {
-            tag = "C"
-            width = 5f
-            color = colorRed
-            endCap = CustomCap(BitmapDescriptorFactory.fromResource(R.drawable.ic_triangle), 6f)
-        }
     }
 
     private fun dispatchTakePictureIntent() {
@@ -553,7 +502,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
     private fun startCompass() {
         if (sensorManager!!.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR) == null) {
             if (sensorManager!!.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) == null ||
-                    sensorManager!!.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) == null  ) {
+                    sensorManager!!.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) == null) {
                 noSensorAlert()
             } else {
                 accelerometer = sensorManager!!.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
@@ -568,7 +517,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
         }
     }
 
-    fun stopCompass() {
+    private fun stopCompass() {
         if(haveSensorRotationVector) sensorManager!!.unregisterListener(this, rotationvector)
         if(haveSensorMagnetometer) sensorManager!!.unregisterListener(this, magnetometer)
         if(haveSensorAccelerometer) sensorManager!!.unregisterListener(this, accelerometer)
