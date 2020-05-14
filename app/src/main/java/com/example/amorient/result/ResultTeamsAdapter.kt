@@ -16,7 +16,7 @@ class ResultTeamsAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int): Unit = with(holder.itemView) {
         val team = items[position]
         val teamName = "Nome da Equipe: ${team.teamName}"
-        val teamMode = "Mode de jogo: ${team.mode}"
+        val teamMode = "Modo de jogo: ${team.mode}"
         val teamTime = "Tempo de percurso: ${team.duration}"
 
         txtTeamName.text = teamName
@@ -24,7 +24,7 @@ class ResultTeamsAdapter(
         txtDuration.text = teamTime
 
         btnShare.setOnClickListener {
-            val message = teamName + teamMode + teamTime
+            val message = "$teamName $teamMode $teamTime"
             listener.invoke(message)
         }
     }

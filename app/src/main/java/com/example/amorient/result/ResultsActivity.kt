@@ -40,9 +40,9 @@ class ResultsActivity : AppCompatActivity() {
         val shareIntent = Intent().apply {
             action = Intent.ACTION_SEND
             type = "text/plain"
-            putExtra(Intent.EXTRA_TEXT, "Compartilhar")
+            putExtra(Intent.EXTRA_TEXT, message)
         }
 
-        startActivity(Intent.createChooser(shareIntent, message))
+        startActivity(Intent.createChooser(shareIntent, "Compartilhar"))
     }
 }
