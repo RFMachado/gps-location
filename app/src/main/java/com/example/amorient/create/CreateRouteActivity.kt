@@ -3,8 +3,7 @@ package com.example.amorient.create
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.ACTION_PICK
-import android.net.Uri
+import android.content.Intent.ACTION_OPEN_DOCUMENT
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
@@ -165,7 +164,7 @@ class CreateRouteActivity: AppCompatActivity() {
     }
 
     private fun dispatchTakePictureIntent() {
-        val photoPickerIntent = Intent(ACTION_PICK).apply {
+        val photoPickerIntent = Intent(ACTION_OPEN_DOCUMENT).apply {
             type = "image/*"
         }
         startActivityForResult(photoPickerIntent, MapsActivity.REQUEST_IMAGE_CAPTURE)
