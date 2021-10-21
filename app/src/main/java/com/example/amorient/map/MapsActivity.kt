@@ -178,7 +178,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
         super.onPause()
         stopCompass()
         //stop location updates when Activity is no longer active
-        mFusedLocationClient?.let { mFusedLocationClient!!.removeLocationUpdates(mLocationCallback) }
+        mFusedLocationClient?.let { mFusedLocationClient?.removeLocationUpdates(mLocationCallback) }
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -200,7 +200,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
                             val pointDistance = getDistanceAzimute(checkPoint)
 
                             val intent = PointDetailActivity.launchIntent(
-                                    this@MapsActivity, pointDistance
+                                this@MapsActivity, pointDistance
                             )
                             startActivity(intent)
                         }
@@ -221,8 +221,8 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
             val image = getMarkerBitmapFromView(checkPoint)
 
             val markerOptions = MarkerOptions()
-                    .position(LatLng(checkPoint.lat, checkPoint.lng))
-                    .icon(BitmapDescriptorFactory.fromBitmap(image))
+                .position(LatLng(checkPoint.lat, checkPoint.lng))
+                .icon(BitmapDescriptorFactory.fromBitmap(image))
 
             val marker =  mGoogleMap!!.addMarker(markerOptions)
             marker.tag = checkPoint.key
@@ -233,9 +233,9 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,
-                            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 //Location Permission already granted
-                mFusedLocationClient!!.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper())
+                mFusedLocationClient?.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper())
                 mGoogleMap?.isMyLocationEnabled = true
 
             } else {
@@ -243,7 +243,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
                 checkLocationPermission()
             }
         } else {
-            mFusedLocationClient!!.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper())
+            mFusedLocationClient?.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper())
             mGoogleMap?.isMyLocationEnabled = true
         }
     }
@@ -251,12 +251,12 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
     private fun getDistanceAzimute(point: CheckPoint): CheckPoint {
         mLastLocation?.let { myLocation ->
             val distance = Utils.distance(
-                    myLocation.latitude, point.lat,
-                    myLocation.longitude, point.lng
+                myLocation.latitude, point.lat,
+                myLocation.longitude, point.lng
             ).formatDistance()
 
             val azimute = Utils.getAzimuteCoordenate(
-                    myLocation.latitude, myLocation.longitude, point.lat, point.lng
+                myLocation.latitude, myLocation.longitude, point.lat, point.lng
             )
 
             return point.copy(distance = distance + azimute)
@@ -269,10 +269,10 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
         val target = LatLng(location.latitude, location.longitude)
 
         val cameraPosition = CameraPosition.Builder()
-                .target(target)
-                .zoom(16f)
-                .bearing(10f)
-                .build()
+            .target(target)
+            .zoom(16f)
+            .bearing(10f)
+            .build()
 
         mGoogleMap?.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
     }
@@ -287,39 +287,40 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
 
     private fun checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(
-                        this,
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED) {
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED) {
 
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                            Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
 
                 AlertDialog.Builder(this)
-                        .setTitle("Location Permission Needed")
-                        .setMessage("This app needs the Location permission, please accept to use location functionality")
-                        .setPositiveButton("OK") { _, i ->
-                            //Prompt the user once explanation has been shown
-                            ActivityCompat.requestPermissions(this@MapsActivity,
-                                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                                    MY_PERMISSIONS_REQUEST_LOCATION)
-                        }
-                        .create()
-                        .show()
+                    .setTitle("Location Permission Needed")
+                    .setMessage("This app needs the Location permission," +
+                            " please accept to use location functionality")
+                    .setPositiveButton("OK") { _, i ->
+                        //Prompt the user once explanation has been shown
+                        ActivityCompat.requestPermissions(this@MapsActivity,
+                            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                            MY_PERMISSIONS_REQUEST_LOCATION)
+                    }
+                    .create()
+                    .show()
 
 
             } else {
                 // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(this,
-                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                        MY_PERMISSIONS_REQUEST_LOCATION)
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    MY_PERMISSIONS_REQUEST_LOCATION)
             }
         }
     }
 
     override fun onRequestPermissionsResult (
-            requestCode: Int,
-            permissions: Array<String>, grantResults: IntArray
+        requestCode: Int,
+        permissions: Array<String>, grantResults: IntArray
     ) {
         if (requestCode == MY_PERMISSIONS_REQUEST_LOCATION) {
             // If request is cancelled, the result arrays are empty.
@@ -328,9 +329,9 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
                 // permission was granted, yay! Do the
                 // location-related task you need to do.
                 if (ContextCompat.checkSelfPermission(this,
-                                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
-                    mFusedLocationClient!!.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper())
+                    mFusedLocationClient?.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper())
                     mGoogleMap?.isMyLocationEnabled = true
                 }
             } else {
@@ -346,8 +347,8 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
 
         val resId = checkPoint.image ?: Uri.parse(checkPoint.imagePath)
 
-        val customMarkerView = (getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
-                .inflate(R.layout.view_custom_marker, null)
+        val customMarkerView = LayoutInflater.from(this)
+            .inflate(R.layout.view_custom_marker, null)
 
         val markerImageView = customMarkerView.findViewById(R.id.profile_image) as ImageView
 
@@ -364,8 +365,8 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
         customMarkerView.layout(0, 0, customMarkerView.measuredWidth, customMarkerView.measuredHeight)
 
         val returnedBitmap = Bitmap.createBitmap(customMarkerView.measuredWidth,
-                customMarkerView.measuredHeight,
-                Bitmap.Config.ARGB_8888
+            customMarkerView.measuredHeight,
+            Bitmap.Config.ARGB_8888
         )
 
         val canvas = Canvas(returnedBitmap).apply {
@@ -390,8 +391,8 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
         mLastLocation?.let {
             checkPoints.forEachIndexed { index, checkPoint ->
                 val distance = Utils.distance(
-                        it.latitude, checkPoint.lat,
-                        it.longitude, checkPoint.lng
+                    it.latitude, checkPoint.lat,
+                    it.longitude, checkPoint.lng
                 )
 
                 if(distance <= 25) {
@@ -445,7 +446,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
         val dialogView = LayoutInflater.from(this).inflate(R.layout.finish_game_dialog, null)
 
         val mBuilder = AlertDialog.Builder(this)
-                .setView(dialogView)
+            .setView(dialogView)
 
         val mAlertDialog = mBuilder.show()
         mAlertDialog.setCanceledOnTouchOutside(false)
@@ -500,27 +501,27 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, SensorEventListener
     }
 
     private fun startCompass() {
-        if (sensorManager!!.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR) == null) {
-            if (sensorManager!!.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) == null ||
-                    sensorManager!!.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) == null) {
+        if (sensorManager?.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR) == null) {
+            if (sensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) == null ||
+                sensorManager?.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) == null) {
                 noSensorAlert()
             } else {
-                accelerometer = sensorManager!!.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-                magnetometer = sensorManager!!.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
+                accelerometer = sensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+                magnetometer = sensorManager?.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
 
-                haveSensorAccelerometer = sensorManager!!.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI)
-                haveSensorMagnetometer = sensorManager!!.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI)
+                haveSensorAccelerometer = sensorManager?.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI) ?: false
+                haveSensorMagnetometer = sensorManager?.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI) ?: false
             }
         } else {
-            rotationvector = sensorManager!!.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
-            haveSensorRotationVector = sensorManager!!.registerListener(this, rotationvector, SensorManager.SENSOR_DELAY_UI)
+            rotationvector = sensorManager?.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
+            haveSensorRotationVector = sensorManager?.registerListener(this, rotationvector, SensorManager.SENSOR_DELAY_UI) ?: false
         }
     }
 
     private fun stopCompass() {
-        if(haveSensorRotationVector) sensorManager!!.unregisterListener(this, rotationvector)
-        if(haveSensorMagnetometer) sensorManager!!.unregisterListener(this, magnetometer)
-        if(haveSensorAccelerometer) sensorManager!!.unregisterListener(this, accelerometer)
+        if(haveSensorRotationVector) sensorManager?.unregisterListener(this, rotationvector)
+        if(haveSensorMagnetometer) sensorManager?.unregisterListener(this, magnetometer)
+        if(haveSensorAccelerometer) sensorManager?.unregisterListener(this, accelerometer)
     }
 
     private fun noSensorAlert() {
